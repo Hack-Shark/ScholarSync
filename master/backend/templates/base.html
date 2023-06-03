@@ -1,0 +1,22 @@
+<!-- base.html -->
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Add your CSS and other common elements here -->
+</head>
+<body>
+    <header>
+        <h1>Header<h1>
+        <!-- Add your header content here -->
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <h1>footer<h1>
+        <!-- Add your footer content here -->
+    </footer>
+</body>
