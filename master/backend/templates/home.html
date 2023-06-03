@@ -1,4 +1,5 @@
 <!-- home.html -->
+
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %} 
 {% block content%}
@@ -14,7 +15,26 @@
 <a href="{% url 'logout' %}">Logout</a>
 {% comment %} form for uploading {% endcomment %}
 <h1>hello you are authenticated</h1>
+{% for message in messages %}
+    <div class="{{ message.tags }}">
+        {{ message }}
+    </div>
+{% endfor %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="button" id="btnsave" value="Save">
+  </form>
+  <div id="prefs_body">
 
+      {% for pref in prefs%}
+          {{pref.category}}\\{{pref.preference}}\\{{pref.after}} 
+          <input type="button" data-sid="{{pref.id}}" class="btn btn-warning btn-sm btn-edit" value="Edit"/>
+          <input type="button" data-sid="{{pref.id}}" class="btn btn-danger btn-sm btn-delete" value="Delete"/>
+          <br>
+      {%endfor%}
+  </div>
+  
 {% endif %}
 
 <!-- Add your specific content here -->

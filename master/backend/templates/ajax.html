@@ -1,0 +1,57 @@
+<script>
+    
+$('#btnsave').click(function(){
+    
+    let pv=$('#id_preference').val()
+    let cv=$('#id_category').val()
+    let av=$('#id_after').val()
+    let csr=$("input[name=csrfmiddlewaretoken").val();
+    if(pv=="")
+    {
+        console.log("Please fill the preference")
+    }
+    else if (cv==""){
+        console.log("Please fill the category")
+    }
+    else if(av=="")
+    {
+        console.log("Please select the after stamp")
+    }else{
+        console.log(pv);
+        console.log(cv);
+        console.log(av);
+        mydata={category:cv,preference:pv,after:av,csrfmiddlewaretoken:csr};
+        $.ajax({
+            url:"{% url 'pref_add' %}",
+            dataType:"json",
+            method: "POST",
+            data:mydata,
+            success:function(data)
+            {
+                console.log(data);
+
+                if(data.status=="Save")
+                {
+                    console.log("Form submitted Successfully");
+                  //  <!-- console.log(data.pref_data) -->
+                  output='';
+                    x=data.pref_data;
+                    console.log(JSON.stringify(x));
+                    for(i=0;i<x.length;i++)
+                    {
+                      output+=x[i].category_id+"\\"+x[i].preference+"\\"+x[i].after+"<input type='button' data-sid="+x[i].id+" class='btn btn-warning btn-sm' value='Edit'/>   <input type='button' data-sid="+x[i].id+" class='btn btn-danger btn-sm' value='Delete'/><br>";
+                    }
+                   // console.log(output);
+                    $("#prefs_body").html(output);
+                    $("form")[0].reset();
+                   // console.log(data.pref_data)
+                }
+                if(data.status==0)
+                {
+                    console.log("Unable to save the preference");
+                }
+            }
+        })
+    }
+})
+</script>

@@ -15,5 +15,5 @@ class Preference(models.Model):
     created_at= models.DateField(default=date.today)
     after= models.DateField(blank=False)
     def __str__(self):
-        return f'{self.user}\t{self.category}\t{self.preference}\t{self.created_at}'
+        return f'{self.user}\t{self.category}\t{self.preference}\t{self.after}'
     

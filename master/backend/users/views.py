@@ -4,13 +4,19 @@ from .forms import LoginForm, SignupForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from base.forms import PrefAddForm
+from base.models import Preference
 def logout_view(request):
     logout(request)
     return redirect('home')
 
 def home_view(request):
-    return render(request, 'home.html')
+    form=PrefAddForm()
+    if(request.user.is_authenticated):
+        prefs=Preference.objects.filter(user=request.user)
+    else:
+        prefs=None
+    return render(request, 'home.html',{'form':form,'prefs':prefs})
     
 def login_view(request):
     if request.method == 'POST':
