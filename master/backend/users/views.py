@@ -12,11 +12,7 @@ def logout_view(request):
 
 def home_view(request):
     form=PrefAddForm()
-    if(request.user.is_authenticated):
-        prefs=Preference.objects.filter(user=request.user)
-    else:
-        prefs=None
-    return render(request, 'home.html',{'form':form,'prefs':prefs})
+    return render(request, 'home.html',{'form':form})
     
 def login_view(request):
     if request.method == 'POST':

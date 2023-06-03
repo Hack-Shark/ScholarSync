@@ -23,16 +23,12 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="button" id="btnsave" value="Save">
+    <input type="button" id="btnsave" value="Save"/>
   </form>
+<input type="button" id="getbtn" value="Get Preferences"/>
+
   <div id="prefs_body">
 
-      {% for pref in prefs%}
-          {{pref.category}}\\{{pref.preference}}\\{{pref.after}} 
-          <input type="button" data-sid="{{pref.id}}" class="btn btn-warning btn-sm btn-edit" value="Edit"/>
-          <input type="button" data-sid="{{pref.id}}" class="btn btn-danger btn-sm btn-delete" value="Delete"/>
-          <br>
-      {%endfor%}
   </div>
   
 {% endif %}
