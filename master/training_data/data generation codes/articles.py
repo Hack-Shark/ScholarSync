@@ -1,17 +1,17 @@
 from bs4 import BeautifulSoup
 import requests
-import os
 import time 
 import requests
-from requests.exceptions import ReadTimeout
 
 start_time=time.time()
 fail_path='failed.csv'
 articles_path='articles.csv'
 request_failed='request_failed.csv'
 request_passed='request_passed.csv'
+
 def attach(string):
     return ''.join(string.splitlines())
+
 def responser(url):
     try:
         response = requests.get(url)
@@ -83,7 +83,7 @@ def extract_articles(url,alp):
                         article_links_data = soup.find_all("a", attrs={'class' : 'title'})
                         for y in article_links_data:
                             with open(f'{alp}.csv', "a", encoding="utf-8") as f:
-                                f.write(f"{attach(x.get_text())}||{attach(y.get_text())}||https://link.springer.com{attach(y.get('href'))}\n")
+                                f.write(f"{attach(x.get_text())}|{attach(y.get_text())}|https://link.springer.com{attach(y.get('href'))}\n")
                         link = getnextpage(soup)
                         if not link:
                             break
@@ -94,20 +94,19 @@ def extract_articles(url,alp):
                 soup = BeautifulSoup(x, 'html.parser')
                 link_text = soup.a.get('href')
                 with open(fail_path, "a", encoding="utf-8") as f:
-                    f.write(f'{soup.a.get_text()}||{link_text}\n')   
+                    f.write(f'{soup.a.get_text()}|{link_text}\n')   
 
 
 def iter():
-    alpha='j'
-    for i in range(0,25):
-        for j in range(3,5):
+    alpha='abcdefghijklmnopqrstuvwxyz'
+    for i in range(len(alpha)):
+        for j in range(1,5):
             alp=alpha[i]
             url=f"https://link.springer.com/journals/{alp}/{j}"
             extract_articles(url,alp)
             print(i,j)
             print(time.time()-start_time)
-            
-        
+
 iter()
 
 
