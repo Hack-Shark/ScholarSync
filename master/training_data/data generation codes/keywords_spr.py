@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import time 
 import requests
+import re
 
 start_time=time.time()
 fail_path='failed.csv'
@@ -8,14 +9,19 @@ articles_path='articles.csv'
 request_failed='request_failed.csv'
 request_passed='request_passed.csv'
 
+pattern=r'[^a-zA-Z0-9\s]'
 def attach(string):
-    return ''.join(string.splitlines())
+    x=string.splitlines()
+    str=''.join(x)
+    text=re.sub(pattern, '', str)
+    modified_string = re.sub(r'\s+', ' ', text.strip())
+    return modified_string
 
 def responser(url):
     try:
         response = requests.get(url)
-        with open(request_passed, "a", encoding="utf-8") as f:
-            f.write(f'{url}\n')   
+        # with open(request_passed, "a", encoding="utf-8") as f:
+        #     f.write(f'{url}\n')   
         return response
     except requests.exceptions.Timeout as e:
         print("Timeout exception occurred:", e)
@@ -82,16 +88,17 @@ def extract_articles(url,alp):
             # Extract the content from the meta tag
             if meta_tag:
                 keywords_content = meta_tag.get('content')
-                print(keywords_content)
+                # print(keywords_content)
             else:
                 keywords_content=""
             if data is not None:
                 abstract = data.get_text(separator=" ")
             else:
                 abstract=""
-            print(abstract,keywords_content)
+            # print(abstract,keywords_content)
             with open(f'{alp}.csv', "a", encoding="utf-8") as f:
-                f.write(f"\"{attach(x.get_text())}\",\"{attach(keywords_content)}\",\"{attach(abstract)}\"\n")
+
+                f.write(f"{attach(x.get_text())};{attach(keywords_content)};{attach(abstract)}\n")
 
 
 def iter():
