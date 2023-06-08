@@ -30,22 +30,19 @@ $('#getbtn').click(function()
 
 $('#btnsave').click(function(){
     
-    let pv=$('#id_preference').val()
-    let cv=$('#id_category').val()
+    let tv=$('#id_text').val()
     let av=$('#id_after').val()
     let csr=$("input[name=csrfmiddlewaretoken").val();
-    if(pv=="")
+    if(tv=="")
     {
-        console.log("Please fill the preference")
-    }
-    else if (cv==""){
-        console.log("Please fill the category")
+        console.log("Please fill the text")
     }
     else if(av=="")
     {
         console.log("Please select the after stamp")
-    }else{
-        mydata={category:cv,preference:pv,after:av,csrfmiddlewaretoken:csr};
+    }
+    else{
+        mydata={text:tv,after:av,csrfmiddlewaretoken:csr};
         $.ajax({
             url:"{% url 'pref_add' %}",
             dataType:"json",
