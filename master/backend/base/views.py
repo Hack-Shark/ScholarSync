@@ -22,7 +22,7 @@ def get_pref(request):
     if request.method=='GET' :
         prefs=Preference.objects.filter(user=request.user).values()
         pref_data=list(prefs)[::-1]
-        mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['a.majji@iitg.ac.in'])
+        mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['mssrinu004@gmail.com'])
         return JsonResponse({'status':'Get','pref_data':pref_data})
     else:
         return JsonResponse({'status':0})
