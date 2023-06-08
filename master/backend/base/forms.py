@@ -3,5 +3,5 @@ from .models import Preference
 
 class PrefAddForm(forms.ModelForm):
     class Meta:
-        model = Preference
-        fields = ['category','preference','after']
+        model =  Preference
+        fields = ['text','after']
