@@ -87,4 +87,58 @@
         })
     })
 
+    //editing function 
+    $("#prefs_body").ready(function () {
+        $("#prefs_body").on("click", ".btn-edit", function () {
+            var row = $(this).closest("tr");
+            var textCell = row.find(".textColumn");
+            var dateCell = row.find(".dateColumn");
+
+            var textValue = textCell.text();
+            textCell.html("<input type='text' value='" + textValue + "'>");
+
+            var dateValue = dateCell.text();
+            dateCell.html("<input type='date' value='" + dateValue + "'>");
+
+            $(this).removeClass("btn-edit").addClass("updateBtn");
+            $(this).prop("value", "Update");
+        });
+
+        $("#prefs_body").on("click", ".updateBtn", function () {
+            var row = $(this).closest("tr");
+            var textCell = row.find(".textColumn");
+            var dateCell = row.find(".dateColumn");
+
+            var updatedTextValue = textCell.find("input").val();
+            
+            var updatedDateValue = dateCell.find("input").val();
+            
+            let id = $(this).attr("data-sid")
+            let csr = $("input[name=csrfmiddlewaretoken").val();
+            mydata = { id: id, text: updatedTextValue, date: updatedDateValue, csrfmiddlewaretoken: csr }
+            console.log(mydata)
+            $.ajax({
+                url: "{% url 'edit_pref' %}",
+                method: "POST",
+                dataType: "json",
+                data: mydata,
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Update successful");
+                        textCell.text(updatedTextValue);
+                        dateCell.text(updatedDateValue);
+                    } else {
+                        console.log("Update failed: " + response.error);
+                    }
+                },
+                error: function (error) {
+                    console.log("Update failed: " + error);
+                }
+            });
+
+            $(this).removeClass("updateBtn").addClass("btn-edit");
+            $(this).prop("value", "Edit");
+        });
+    });
+
 </script>

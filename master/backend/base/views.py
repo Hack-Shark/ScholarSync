@@ -41,6 +41,22 @@ def del_pref(request):
     else:
         return JsonResponse({'status':0})
 
+def edit_pref(request):
+    if request.method == 'POST':
+        print(request.POST)
+        id = request.POST.get('id','')
+        text = request.POST.get('text','')
+        date = request.POST.get('date','')
+        pref= Preference.objects.filter(user=request.user).get(id=id)
+        print(pref)
+        # if type=='text':
+        pref.text=text
+        # if type=='after':
+        pref.after=date
+        pref.save()
+        return JsonResponse({'success':"Updated"})
+        
+
 def mail_send(data,recipents,website):
     sub=f"Your weekly feed from {website}"
     html_message = render_to_string('email.html', data)
