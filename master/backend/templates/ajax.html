@@ -1,70 +1,68 @@
 <script>
-    
-//geting the user related prefs
-$('#getbtn').click(function()
-{
-    console.log("btn clicked")
-    $.ajax({
-        url: "{% url 'get_pref' %}",
-        type: "GET",
-        dataType: "json",
-        success: function(response) {
-          console.log(response);
-        },
-        error: function(error) {
-          console.error(error);
+    // saving the pref data to db
+    $('#btnsave').click(function () {
+        let tv = $('#text').val()
+        let av = $('#after').val()
+        let csr = $("input[name=csrfmiddlewaretoken").val();
+        if (tv == "") {
+            console.log("Please fill the text")
         }
-      });
-})
+        else if (av == "") {
+            console.log("Please select the after stamp")
+        }
+        else {
+            mydata = { text: tv, after: av, csrfmiddlewaretoken: csr };
+            console.log(mydata)
+            $.ajax({
+                url: "{% url 'pref_add' %}",
+                dataType: "json",
+                method: "POST",
+                data: mydata,
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == "Save") {
+                        console.log("Form submitted Successfully");
+                        $("form")[0].reset();
 
+                    }
+                    if (data.status == 0) {
+                        console.log("Unable to save the preference");
+                    }
+                }
+            })
+        }
+    })
 
-
-//editing function 
-// deleting function
-
-
-
-
-
-
-
-$('#btnsave').click(function(){
-    
-    let tv=$('#id_text').val()
-    let av=$('#id_after').val()
-    let csr=$("input[name=csrfmiddlewaretoken").val();
-    if(tv=="")
-    {
-        console.log("Please fill the text")
-    }
-    else if(av=="")
-    {
-        console.log("Please select the after stamp")
-    }
-    else{
-        mydata={text:tv,after:av,csrfmiddlewaretoken:csr};
+    //geting the user related prefs
+    $('#getbtn').click(function () {
+        console.log("getting preferences")
         $.ajax({
-            url:"{% url 'pref_add' %}",
-            dataType:"json",
-            method: "POST",
-            data:mydata,
-            success:function(data)
-            {
-                if(data.status=="Save")
-                {
-                    console.log("Form submitted Successfully");
-                    output='';
-                    x=data.pref_data;
-                    $("#prefs_body").html(output);
-                    $("form")[0].reset();
-
+            url: "{% url 'get_pref' %}",
+            type: "GET",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                output = '';
+                x = response.pref_data;
+                for (i = 0; i < x.length; i++) {
+                    output += `<tr>
+                                    <td>`+ (i + 1) + `</td>
+                                    <td class="textColumn">`+ x[i].text + `</td>
+                                    <td class="dateColumn">`+ x[i].after + `</td>
+                                    <td>3</td>
+                                    <td>
+                                        <input class="btn btn-edit btn-warning btn-sm" data-sid="`+ x[i].id + `" type="button" value="Edit">
+                                        <input class="btn btn-del btn-danger btn-sm" data-sid="`+ x[i].id + `" type="button" value="Delete">
+                                    </td>
+                                </tr>`
                 }
-                if(data.status==0)
-                {
-                    console.log("Unable to save the preference");
-                }
+                $("#prefs_body").html(output);
+            },
+            error: function (error) {
+                console.error(error);
             }
-        })
-    }
-})
+        });
+    })
+
+    
 </script>
