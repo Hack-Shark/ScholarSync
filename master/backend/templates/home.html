@@ -1,38 +1,83 @@
 <!-- home.html -->
 
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %} 
+
+{% block title %} Home {% endblock %}
+
 {% block content%}
-<h2>Welcome to the Home Page</h2>
+<h1>Welcome to the Home Page</h1>
+
 {% if not user.is_authenticated %}
 <p>Please sign in to access the content.</p>
 <a href="{% url 'login' %}">Sign in</a>
 <p>New User</p>
 <a href="{% url 'signup' %}">Sign Up</a>
-{% endif %} 
+{% endif %}
+
 <!-- Add your content for authenticated users here -->
+
 {% if user.is_authenticated %}
-<a href="{% url 'logout' %}">Logout</a>
-{% comment %} form for uploading {% endcomment %}
-<h1>hello you are authenticated</h1>
-{% for message in messages %}
-    <div class="{{ message.tags }}">
-        {{ message }}
-    </div>
-{% endfor %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="button" id="btnsave" value="Save"/>
-  </form>
-<input type="button" id="getbtn" value="Get Preferences"/>
+<div class="container my-4">
+	{% comment %} form for uploading {% endcomment %}
 
-  <div id="prefs_body">
+	<h2 class="text-center">hello you are authenticated</h2>
 
-  </div>
-  
+	<div class="row justify-content-around">
+		<div class="col-sm-4">
+			<h5 class="text-center alert alert-success">
+				Enter a senctence
+			</h5>
+			<form method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input class="btn btn-success" type="button" id="btnsave" value="Save" />
+			</form>
+			<input class="btn btn-outline-primary btn-sm" type="button" id="getbtn" value="Get Preferences" />
+		</div>
+		<div class="col-sm-7">
+			<h5 class="text-center alert alert-info">
+				Previous Article Preferences
+			</h5>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Text</th>
+						<th scope="col">After</th>
+						<th scope="col">Mails received</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody id="prefs_body">
+					{% for prf in pref_data %}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td class="textColumn">{{prf.text}}</td>
+						<td class="dateColumn">{{prf.after}}</td>
+						<td>3</td>
+						<td>
+							<input class="btn btn-edit btn-warning btn-sm" data-sid="{{prf.id}}" type="button" value="Edit">
+							<input class="btn btn-del btn-danger btn-sm" data-sid="{{prf.id}}" type="button" value="Delete">
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	{% for message in messages %}
+	<div class="{{ message.tags }}">
+		{{ message }}
+	</div>
+	{% endfor %}
+
+</div>
+
+<a href="{% url 'logout' %}">
+	<input class="btn btn-sm btn-outline-danger px-3 mx-3" type="button" value="logout">
+</a>
 {% endif %}
 
 <!-- Add your specific content here -->
-
 {% endblock %}
