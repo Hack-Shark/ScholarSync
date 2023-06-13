@@ -64,5 +64,27 @@
         });
     })
 
-    
+    // deleting function
+    $("#prefs_body").on("click", ".btn-del", function () {
+        // console.log("delete btn is clicked")
+        let id = $(this).attr("data-sid")
+        let csr = $("input[name=csrfmiddlewaretoken").val();
+        // console.log(id);
+        mydata = { sid: id, csrfmiddlewaretoken: csr }
+        mythis = this
+        $.ajax({
+            url: "{% url 'del_pref' %}",
+            method: "POST",
+            data: mydata,
+            success: function (data) {
+                // console.log(data);
+                if (data.status == 1) {
+                    console.log("deleted successfully")
+                    $(mythis).closest("tr").fadeOut();
+                }
+                else console.log("unable to delete")
+            },
+        })
+    })
+
 </script>

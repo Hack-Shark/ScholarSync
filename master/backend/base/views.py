@@ -30,6 +30,16 @@ def get_pref(request):
         return JsonResponse({'status':'Get','pref_data':pref_data})
     else:
         return JsonResponse({'status':0})
+    
+def del_pref(request):
+    if request.method == "POST":
+        id = request.POST.get('sid')
+        print(id)
+        dp = Preference.objects.filter(user=request.user).get(id=id)
+        dp.delete()
+        return JsonResponse({'status':1})
+    else:
+        return JsonResponse({'status':0})
 
 def mail_send(data,recipents,website):
     sub=f"Your weekly feed from {website}"
