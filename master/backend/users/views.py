@@ -6,14 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from base.forms import PrefAddForm
 from base.models import Preference
-def logout_view(request):
-    logout(request)
-    return redirect('home')
 
 def home_view(request):
     form=PrefAddForm()
-    return render(request, 'home.html',{'form':form})
-    
+    pref_data=Preference.objects.filter(user=request.user).values()
+    pref_data=list(pref_data)[::-1]
+    return render(request, 'home.html',{'form':form,'pref_data':pref_data})
+
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -44,3 +43,7 @@ def signup_view(request):
     else:
         form = SignupForm()
     return render(request, 'user/signup.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')
