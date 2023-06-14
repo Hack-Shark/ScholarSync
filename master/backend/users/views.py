@@ -9,9 +9,12 @@ from base.models import Preference
 
 def home_view(request):
     form=PrefAddForm()
-    pref_data=Preference.objects.filter(user=request.user).values()
-    pref_data=list(pref_data)[::-1]
-    return render(request, 'home.html',{'form':form,'pref_data':pref_data})
+    if not request.user.is_authenticated:
+        return render(request, 'home.html',{'form':form})
+    else:
+        pref_data=Preference.objects.filter(user=request.user).values()
+        pref_data=list(pref_data)[::-1]
+        return render(request, 'home.html',{'form':form,'pref_data':pref_data})
 
 def login_view(request):
     if request.method == 'POST':
