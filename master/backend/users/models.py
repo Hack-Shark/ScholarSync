@@ -8,3 +8,11 @@ from django.contrib.auth.models import User
     
 #     def __str__(self) -> str:
 #         return self.user.username
+
+class EmailTime(models.Model):
+    email = models.EmailField()
+    time = models.TimeField()
+    pref = models.TextField()
+
+    def __str__(self):
+        return f'{self.pref}\t{self.time}\t{self.email}'
