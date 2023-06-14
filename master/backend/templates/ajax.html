@@ -1,17 +1,22 @@
 <script>
-    // saving the pref data to db
+    // saving the pref data to Preference db and time_data to EmailTime db
     $('#btnsave').click(function () {
-        let tv = $('#text').val()
-        let av = $('#after').val()
+        let text_val = $('#text').val()
+        let after_val = $('#after').val()
+        let email_val = $('#emailid').val()
+        let time_val = $('#timeid').val()
         let csr = $("input[name=csrfmiddlewaretoken").val();
-        if (tv == "") {
+        if (text_val == "") {
             console.log("Please fill the text")
         }
-        else if (av == "") {
+        else if (after_val == "") {
             console.log("Please select the after stamp")
         }
+        else if (time_val == "") {
+            console.log("Please provide the time to mail")
+        }
         else {
-            mydata = { text: tv, after: av, csrfmiddlewaretoken: csr };
+            mydata = { text: text_val, after: after_val, csrfmiddlewaretoken: csr };
             console.log(mydata)
             $.ajax({
                 url: "{% url 'pref_add' %}",
@@ -27,6 +32,31 @@
                     }
                     if (data.status == 0) {
                         console.log("Unable to save the preference");
+                    }
+                }
+            })
+
+            // get the email from user
+            // if(email_val=="")
+            // {
+            //     email_val=
+            // }
+            mytime = { email: email_val, time: time_val, pref: text_val, csrfmiddlewaretoken: csr }
+            console.log(mytime)
+            $.ajax({
+                url: "{% url 'emailTime' %}",
+                dataType: "json",
+                method: "POST",
+                data: mytime,
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == 1) {
+                        console.log("timeForm submitted Successfully");
+                        console.log(data.time_data)
+                        $("form")[0].reset();
+                    }
+                    if (data.status == 0) {
+                        console.log("Unable to save the timeform");
                     }
                 }
             })
@@ -110,9 +140,9 @@
             var dateCell = row.find(".dateColumn");
 
             var updatedTextValue = textCell.find("input").val();
-            
+
             var updatedDateValue = dateCell.find("input").val();
-            
+
             let id = $(this).attr("data-sid")
             let csr = $("input[name=csrfmiddlewaretoken").val();
             mydata = { id: id, text: updatedTextValue, date: updatedDateValue, csrfmiddlewaretoken: csr }
