@@ -1,6 +1,7 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
+from users.models import EmailTime
 from backend.settings import EMAIL_HOST_USER
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
@@ -36,7 +37,9 @@ def del_pref(request):
         id = request.POST.get('sid')
         print(id)
         dp = Preference.objects.filter(user=request.user).get(id=id)
+        dt = EmailTime.objects.get(pref=dp.text)
         dp.delete()
+        dt.delete()
         return JsonResponse({'status':1})
     else:
         return JsonResponse({'status':0})
@@ -48,12 +51,14 @@ def edit_pref(request):
         text = request.POST.get('text','')
         date = request.POST.get('date','')
         pref= Preference.objects.filter(user=request.user).get(id=id)
+        et = EmailTime.objects.get(pref=pref.text)
         print(pref)
-        # if type=='text':
+        print(et)
         pref.text=text
-        # if type=='after':
         pref.after=date
+        et.pref=text
         pref.save()
+        et.save()
         return JsonResponse({'success':"Updated"})
         
 
