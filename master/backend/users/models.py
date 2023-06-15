@@ -10,9 +10,10 @@ from django.contrib.auth.models import User
 #         return self.user.username
 
 class EmailTime(models.Model):
+    user=models.ForeignKey(User,default=None,on_delete=models.CASCADE)
     email = models.EmailField()
     time = models.TimeField()
-    pref = models.TextField()
+    freq = models.CharField(max_length=10,null=True)
 
     def __str__(self):
-        return f'{self.pref}\t{self.time}\t{self.email}'
+        return f'{self.time}\t{self.email}\t{self.freq}'

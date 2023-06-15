@@ -63,11 +63,12 @@ def emailTime_view(request):
     if request.method == 'POST':
         form = EmailTimeForm(request.POST)
         if form.is_valid():
-            pref = request.POST.get('pref')
+            freq = request.POST.get('freq')
             email = request.POST.get('email')
             time = request.POST.get('time')
+            
             # Create an EmailTime object and save it
-            email_time = EmailTime(email=email, time=time, pref=pref)
+            email_time = EmailTime(email=email, time=time, freq=freq)
             email_time.save()
             time_data=EmailTime.objects.values()
             time_data=list(time_data)[::-1]
