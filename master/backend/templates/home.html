@@ -30,8 +30,8 @@
 			<form method="post">
 				{% csrf_token %}
 				{{ form.as_p }}
-				{% csrf_token %}
-				{{ timeform.as_p }}
+				<!-- {% csrf_token %}
+				{{ timeform.as_p }} -->
 				<input class="btn btn-success" type="button" id="btnsave" value="Save" />
 			</form>
 			<input class="btn btn-outline-primary btn-sm" type="button" id="getbtn" value="Get Preferences" />

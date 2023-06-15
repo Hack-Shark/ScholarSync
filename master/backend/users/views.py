@@ -13,13 +13,12 @@ from .forms import EmailTimeForm
 # Home page view
 def home_view(request):
     form=PrefAddForm()
-    timeform=EmailTimeForm()
     if not request.user.is_authenticated:
         return render(request, 'home.html')
     else:
         pref_data=Preference.objects.filter(user=request.user).values()
         pref_data=list(pref_data)[::-1]
-        return render(request, 'home.html',{'form':form,'timeform':timeform,'pref_data':pref_data})
+        return render(request, 'home.html',{'form':form,'pref_data':pref_data})
 
 # login view
 def login_view(request):

@@ -3,17 +3,12 @@
     $('#btnsave').click(function () {
         let text_val = $('#text').val()
         let after_val = $('#after').val()
-        let email_val = $('#emailid').val()
-        let time_val = $('#timeid').val()
         let csr = $("input[name=csrfmiddlewaretoken").val();
         if (text_val == "") {
             console.log("Please fill the text")
         }
         else if (after_val == "") {
             console.log("Please select the after stamp")
-        }
-        else if (time_val == "") {
-            console.log("Please provide the time to mail")
         }
         else {
             mydata = { text: text_val, after: after_val, csrfmiddlewaretoken: csr };
@@ -32,31 +27,6 @@
                     }
                     if (data.status == 0) {
                         console.log("Unable to save the preference");
-                    }
-                }
-            })
-
-            // get the email from user
-            // if(email_val=="")
-            // {
-            //     email_val=
-            // }
-            mytime = { email: email_val, time: time_val, pref: text_val, csrfmiddlewaretoken: csr }
-            console.log(mytime)
-            $.ajax({
-                url: "{% url 'emailTime' %}",
-                dataType: "json",
-                method: "POST",
-                data: mytime,
-                success: function (data) {
-                    console.log(data)
-                    if (data.status == 1) {
-                        console.log("timeForm submitted Successfully");
-                        console.log(data.time_data)
-                        $("form")[0].reset();
-                    }
-                    if (data.status == 0) {
-                        console.log("Unable to save the timeform");
                     }
                 }
             })
@@ -110,7 +80,23 @@
                 // console.log(data);
                 if (data.status == 1) {
                     console.log("deleted successfully")
-                    $(mythis).closest("tr").fadeOut();
+                    output = '';
+                    x = data.pref_data;
+                    for (i = 0; i < x.length; i++) {
+                        output += `<tr>
+                                    <td>`+ (i + 1) + `</td>
+                                    <td class="textColumn">`+ x[i].text + `</td>
+                                    <td class="dateColumn">`+ x[i].after + `</td>
+                                    <td>3</td>
+                                    <td>
+                                        <input class="btn btn-edit btn-warning btn-sm" data-sid="`+ x[i].id + `" type="button" value="Edit">
+                                        <input class="btn btn-del btn-danger btn-sm" data-sid="`+ x[i].id + `" type="button" value="Delete">
+                                    </td>
+                                </tr>`
+                    }
+                    $(mythis).closest("tr").fadeOut(500, function () {
+                        $("#prefs_body").html(output).fadeIn(500);
+                    });
                 }
                 else console.log("unable to delete")
             },
