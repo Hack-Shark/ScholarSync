@@ -24,12 +24,10 @@ class EmailTimeForm(forms.ModelForm):
         ('weekly', 'Weekly'),
         ('monthly', 'Monthly'),
     )
-    freq = forms.ChoiceField(label='Mailing Frequency', choices=FREQUENCY_CHOICES, widget=forms.Select(attrs={'class': 'form-control', 'id': 'freq'}))
+    freq = forms.ChoiceField(label='Frequency of mails', choices=FREQUENCY_CHOICES, widget=forms.Select(attrs={'class': 'form-control', 'id': 'freq','disabled':'True'}))
+    time = forms.TimeField(label='Time to mail',widget=forms.TimeInput(attrs={'class': 'form-control', 'id': 'timeid', 'type': 'time', 'disabled':'True'}))
+    email = forms.EmailField(label='Email',widget=forms.EmailInput(attrs={'class': 'form-control', 'id': 'emailid','placeholder':'if not to registered mail', 'disabled':'True'}))
     
     class Meta:
         model = EmailTime
         fields = ('email', 'time', 'freq')
-        widgets = {
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'id': 'emailid','placeholder':'if not to registered mail'}),
-            'time': forms.TimeInput(attrs={'class': 'form-control', 'id': 'timeid', 'type': 'time'}),
-        }

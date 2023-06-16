@@ -1,14 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, EmailTimeForm
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from base.forms import PrefAddForm
 from base.models import Preference
-from django.http import JsonResponse
 from .models import EmailTime
-from .forms import EmailTimeForm
 
 # Home page view
 def home_view(request):
@@ -58,19 +56,13 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-# email sending time view
-def emailTime_view(request):
+# profile view
+def profile_view(request):
+    email_time, created = EmailTime.objects.get_or_create(user=request.user)
     if request.method == 'POST':
-        form = EmailTimeForm(request.POST)
+        form = EmailTimeForm(request.POST, instance=email_time)
         if form.is_valid():
-            freq = request.POST.get('freq')
-            email = request.POST.get('email')
-            time = request.POST.get('time')
-            
-            # Create an EmailTime object and save it
-            email_time = EmailTime(email=email, time=time, freq=freq)
-            email_time.save()
-            time_data=EmailTime.objects.values()
-            time_data=list(time_data)[::-1]
-            return JsonResponse({'status': 1,'time_data':time_data})
-    return JsonResponse({'status': 0})
+            form.save()
+    else:
+        form = EmailTimeForm(instance=email_time)
+    return render(request, 'profile.html', {'user': request.user, 'form': form})
