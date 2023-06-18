@@ -156,7 +156,7 @@ def get_links(user_input):
     recommendation_list=get_article_recommendations(user_input)
     for article in recommendation_list:
         cosine_similarity,article_id,journal_id=article
-        l.append((JOURNAL_MAIN['article_df'][journal_id].iloc[article_id,0],JOURNAL_MAIN['article_df'][journal_id].iloc[article_id,1]))
+        l.append((JOURNAL_MAIN['article_df'][journal_id].iloc[article_id,0],JOURNAL_MAIN['article_df'][journal_id].iloc[article_id,1],article_id,journal_id))
         # print(name,url)
     return l
 
