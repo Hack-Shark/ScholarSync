@@ -5,6 +5,7 @@ from backend.settings import EMAIL_HOST_USER
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from .cache_builder import get_links
 
 def pref_add(request):
     print(request)
@@ -14,10 +15,11 @@ def pref_add(request):
         if form.is_valid():
             obj=form.save(commit=False)
             obj.user=request.user
+            print(get_links(obj.text))
             obj.save()
             prefs=Preference.objects.filter(user=request.user).values()
             pref_data=list(prefs)[::-1]
-            print(pref_data)
+            # print(pref_data)
             return JsonResponse({'status':'Save','pref_data':pref_data})
         else:
             for field, errors in form.errors.items():
@@ -28,6 +30,7 @@ def get_pref(request):
     if request.method=='GET' :
         prefs=Preference.objects.filter(user=request.user).values()
         pref_data=list(prefs)[::-1]
+        
         # mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['mssrinu004@gmail.com'])
         return JsonResponse({'status':'Get','pref_data':pref_data})
     else:
@@ -71,3 +74,5 @@ def mail_send(data,recipents,website):
     )
     email.attach_alternative(html_message,"text/html")
     email.send()
+
+

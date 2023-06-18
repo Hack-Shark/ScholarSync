@@ -8,8 +8,11 @@ import datetime
 #     created_at=models.DateTimeField(auto_now_add=True)
     
 #     def __str__(self) -> str:
-#         return self.user.username
+#         return self.user.usernam
 
+# class Frequency(models.Model):
+#     freq=models.CharField(max_length=10)
+#     time=models,models.DurationField()
 class EmailTime(models.Model):
     user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
     email = models.EmailField()
