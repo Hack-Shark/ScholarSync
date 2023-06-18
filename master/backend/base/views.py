@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 
 def pref_add(request):
+    print(request)
+    print(request.POST)
     if request.method == 'POST':
         form = PrefAddForm(request.POST)
         if form.is_valid():

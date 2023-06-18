@@ -8,15 +8,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','id':'password'}))
 
 class SignupForm(UserCreationForm):
+    email=forms.EmailField()
+    
     class Meta:
         model = User
         fields = ('username','email','password1', 'password2')
-        widgets = {
-            'username' : forms.TextInput(attrs={'class':'form-control','id':'userid'}),
-            'email' : forms.EmailInput(attrs={'class':'form-control','id':'emailid'}),
-            'password1' : forms.PasswordInput(attrs={'class':'form-control','id':'pass1'}),
-            'password2' : forms.PasswordInput(attrs={'class':'form-control','id':'pass2'}),
-        }
 
 class EmailTimeForm(forms.ModelForm):
     FREQUENCY_CHOICES = (

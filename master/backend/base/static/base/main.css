@@ -1,0 +1,161 @@
+body {
+  background: #ffffff;
+  color: #151414;
+  margin-top: 5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #342727;
+}
+
+ul {
+  margin: 0;
+}
+
+.bg-steel {
+  background-color: #5f788a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.form-container {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 2px dotted #1a1a1a;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.alert {
+  color: #fff;
+  background-color: #1e1e1e;
+  border-color: #1e1e1e;
+}
+
+.alert-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-edit,
+.btn-del {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-del {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-edit:hover,
+.btn-del:hover {
+  background-color: #c79107;
+  color: #000;
+}
+
+.table {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+}
+
+th:first-child {
+  padding-left: 20px;
+}
+
+th:last-child {
+  padding-right: 20px;
+}
+
+td {
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #222;
+}
+
+tr:hover {
+  background-color: #111;
+}
+
+td:first-child {
+  padding-left: 20px;
+}
+
+td:last-child {
+  padding-right: 20px;
+}
+
+.btn {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(to bottom, #007bff, #0062cc);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to bottom, #0062cc, #007bff);
+  color: #fff;
+}
+
+.btn-success {
+  margin-top: 20px;
+  background: linear-gradient(to bottom, #28a745, #218838);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: linear-gradient(to bottom, #218838, #28a745);
+  color: #fff;
+}
+
+.btn-warning {
+  background: linear-gradient(to bottom, #ffc107, #d39e00);
+  color: #000;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(to bottom, #d39e00, #ffc107);
+  color: #000;
+}
+
+.btn-danger {
+  background: linear-gradient(to bottom, #dc3545, #bd2130);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(to bottom, #bd2130, #dc3545);
+  color: #fff;
+}

@@ -1,0 +1,76 @@
+<!-- home.html -->
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'base/home.css' %}">
+{% endblock %}
+
+{% block content%}
+
+<h1>Hello {{ user.username }}, Welcome to the Home Page</h1>
+
+{% if not user.is_authenticated %}
+<p>Please sign in to access the content.</p>
+<a href="{% url 'login' %}">Sign in</a>
+<p>New User</p>
+<a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+
+<!-- Add your content for authenticated users here -->
+
+{% if user.is_authenticated %}
+
+{% comment %} form for uploading {% endcomment %}
+
+<div class="row justify-content-between">
+	<div class="col-sm-5">
+		<div class="form-container">
+			<form method="post">
+				{% csrf_token %}
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Enter a sentence</legend>
+					{{ form|crispy }}
+				</fieldset>
+				<div class="form-group">
+					<input class="btn btn-success" type="button" id="btnsave" value="Save"/>
+				</div>
+			</form>
+		</div>
+		<input class="btn btn-primary btn-sm mb-3" type="button" id="getbtn" value="Get Preferences" />
+	</div>
+	<div class="col-sm-7">
+		<h5 class="text-center alert alert-info">
+			Previous Article Preferences
+		</h5>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Text</th>
+					<th scope="col">After</th>
+					<th scope="col">Mails received</th>
+					<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody id="prefs_body">
+				{% for prf in pref_data %}
+				<tr>
+					<td>{{forloop.counter}}</td>
+					<td class="textColumn">{{prf.text}}</td>
+					<td class="dateColumn">{{prf.after}}</td>
+					<td>3</td>
+					<td>
+						<input class="btn btn-edit btn-warning btn-sm" data-sid="{{prf.id}}" type="button" value="Edit">
+						<input class="btn btn-del btn-danger btn-sm" data-sid="{{prf.id}}" type="button" value="Delete">
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

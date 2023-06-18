@@ -1,121 +1,14 @@
 <!-- profile.html -->
 
 {% extends 'base.html' %}
-
-{% block title %} Profile {% endblock %}
-
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'base/profile.css' %}">
+{% endblock %}
 {% block content %}
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #222;
-        color: #fff;
-    }
-
-    h1 {
-        margin-bottom: 20px;
-    }
-
-    .user-details-container {
-        display: inline-flex;
-        align-items: center;
-        border: 1px solid #333;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        background-color: #333;
-    }
-
-    .user-details-image {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        border: 4px solid #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        margin-right: 20px;
-    }
-
-    .user-details-text {
-        flex-grow: 1;
-    }
-
-    .scoreboard {
-        margin-bottom: 40px;
-        border: 1px solid #333;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        background-color: #333;
-    }
-
-    .scoreboard h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .scoreboard-scores {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .scoreboard-scores-item {
-        text-align: center;
-    }
-
-    .scoreboard-scores-item strong {
-        display: block;
-        font-size: 24px;
-    }
-
-    .scoreboard-plot {
-        text-align: center;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        padding: 10px;
-        background-color: #333;
-    }
-
-    .form-container {
-        border: 1px solid #333;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        background-color: #333;
-    }
-
-    .form-control {
-        flex: 3;
-        background-color: #444;
-        color: #fff;
-        margin: 2px;
-    }
-
-    .form-control:disabled {
-        /* flex: 3; */
-        color: #fff;
-        background-color: #333;
-        border: none;
-    }
-
-    p {
-        margin-top: 3px;
-        margin-bottom: 0;
-        display: flex;
-    }
-
-    label {
-        padding-top: 5px;
-        flex: 1;
-    }
-</style>
-
 <div style="color: #fff; font-size: 30px; text-align: left; margin-bottom: 20px;">
-    <h4 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid rgb(86, 84, 84);"></h4>
+    <h4 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid rgb(255, 255, 255);"></h4>
 </div>
 
 <div class="my-4"></div>
@@ -163,14 +56,6 @@
         </div>
     </div>
 </div>
-
-<a href="{% url 'logout' %}">
-	<input class="btn btn-sm btn-danger px-3 mx-3" type="button" value="Logout">
-</a>
-<div class="my-2"></div>
-<a href="{% url 'home' %}">
-	<input class="btn btn-sm btn-success px-3 mx-3" type="button" value="Home">
-</a>
 
 <script>
     // Get references to DOM elements
@@ -220,7 +105,7 @@
     // Create the chart
     const scorePlot = new Chart('score-plot', plotConfig);
     // Typewriter effect
-    const text = "Hi user, Welcome to your profile page...";
+    const text = "Hi {{ user.username }}, Welcome to your profile page...";
     let index = 0;
     function typeWriter() {
         if (index < text.length) {
