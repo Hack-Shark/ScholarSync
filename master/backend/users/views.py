@@ -53,14 +53,19 @@ def signup_view(request):
         form = SignupForm()
     return render(request, 'users/signup.html', {'title':'Register','form': form})
 
-frequency, created = Frequency.objects.get_or_create(freq="daily", time=timedelta(days=1))
-# profile view
+
+
 @login_required
 def profile_view(request):
     email_time, created = EmailTime.objects.get_or_create(user=request.user)
-    email_time.email = request.user.email if request.user.email else settings.DEFAULT_EMAIL
-    email_time.freq = frequency
-    email_time.save()
+   
+
+    if created:
+        frequency, _ = Frequency.objects.get_or_create(freq="daily", time=timedelta(days=1))
+        email_time.email = request.user.email if request.user.email else settings.DEFAULT_EMAIL
+        email_time.freq = frequency
+        email_time.save()
+
     if request.method == 'POST':
         form = EmailTimeForm(request.POST, instance=email_time)
         if form.is_valid():
