@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from .forms import SignupForm, EmailTimeForm
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm, SignupForm, EmailTimeForm
+from django.contrib.auth.models import User
 from base.forms import PrefAddForm
 from base.models import Preference
 from django.contrib import messages
 from .models import EmailTime
 from django.contrib.auth.decorators import login_required
 
+# home view
 def home(request):
     form=PrefAddForm()
     if not request.user.is_authenticated:
@@ -14,6 +17,27 @@ def home(request):
         pref_data=Preference.objects.filter(user=request.user).values()
         pref_data=list(pref_data)[::-1]
         return render(request, 'home.html',{'form':form,'pref_data':pref_data})
+    
+# login view
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user_obj=User.objects.filter(email=email).first()
+            if(user_obj is not None):
+                user = authenticate(request,username=user_obj.username, password=password)
+                if user:
+                    login(request, user)
+                    return redirect('home') 
+                else:
+                    messages.success(request, 'Password invalid')
+            else:
+                messages.success(request, 'Email or Password invalid')
+    else:
+        form = LoginForm()
+    return render(request, 'users/login.html', {'form': form})
 
 # signup view
 def signup_view(request):
