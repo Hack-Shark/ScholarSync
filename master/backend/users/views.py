@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 from base.forms import PrefAddForm
 from base.models import Preference
 from django.contrib import messages
-from .models import EmailTime
+from .models import EmailTime,Frequency
 from django.contrib.auth.decorators import login_required
-
+from datetime import timedelta
+from django.conf import settings
 # home view
 def home(request):
     form=PrefAddForm()
@@ -52,10 +53,14 @@ def signup_view(request):
         form = SignupForm()
     return render(request, 'users/signup.html', {'title':'Register','form': form})
 
+frequency, created = Frequency.objects.get_or_create(freq="daily", time=timedelta(days=1))
 # profile view
 @login_required
 def profile_view(request):
     email_time, created = EmailTime.objects.get_or_create(user=request.user)
+    email_time.email = request.user.email if request.user.email else settings.DEFAULT_EMAIL
+    email_time.freq = frequency
+    email_time.save()
     if request.method == 'POST':
         form = EmailTimeForm(request.POST, instance=email_time)
         if form.is_valid():
