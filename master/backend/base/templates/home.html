@@ -49,7 +49,6 @@
 					<th scope="col">ID</th>
 					<th scope="col">Text</th>
 					<th scope="col">After</th>
-					<th scope="col">Mails received</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -59,7 +58,6 @@
 					<td>{{forloop.counter}}</td>
 					<td class="textColumn">{{prf.text}}</td>
 					<td class="dateColumn">{{prf.after}}</td>
-					<td>3</td>
 					<td>
 						<input class="btn btn-edit btn-warning btn-sm" data-sid="{{prf.id}}" type="button" value="Edit">
 						<input class="btn btn-del btn-danger btn-sm" data-sid="{{prf.id}}" type="button" value="Delete">

@@ -29,6 +29,7 @@ def get_paragraph(row,index):
   for x in row[index]:
     ans=ans+'  '+x.lower()
   return ans
+
 def get_clean_text(row,index):
     if not isinstance(row[index], str):
         return '' 
@@ -39,11 +40,13 @@ def get_clean_text(row,index):
         if( re.match(r'^[a-zA-Z]+$', word) and  word not in stop_words and len(word) >1 and word[1] != '.'):
             clean_text=clean_text+' '+word
     return clean_text
+
 def combine(row,indices):
     ans=''
     for i in indices:
       ans=ans+' '+row[i]
     return ans
+
 # Create a memory object with the cache directory
 memory = Memory(CACHE_DIR)
 journal_threshold=4
