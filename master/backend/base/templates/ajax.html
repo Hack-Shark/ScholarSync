@@ -28,6 +28,13 @@
                     if (data.status == 0) {
                         console.log("Unable to save the preference");
                     }
+                    if (data.status == 'invalid') {
+                        console.log('invalid input');
+                        alert(data.message);
+                        // $('#messages').text(data.message);
+                        // $("#messages").show().delay(3000).fadeOut();
+                        $('form')[0].reset();
+                    }
                 }
             })
         }
@@ -157,7 +164,7 @@
 
     //profile data
     // AJAX function to enable form editing
-    $('#mail-form').on('click','.btn-edit',function() {
+    $('#mail-form').on('click', '.btn-edit', function () {
         // Enable form inputs
         $('#freq').prop('disabled', false);
         $('#timeid').prop('disabled', false);
@@ -169,7 +176,7 @@
     });
 
     // AJAX function to save form data
-    $('#mail-form').on('click', '.updateBtn', function() {
+    $('#mail-form').on('click', '.updateBtn', function () {
         // Disable form inputs
         $('#freq').prop('disabled', true);
         $('#timeid').prop('disabled', true);
@@ -178,7 +185,7 @@
         let tv = $('#timeid').val()
         let ev = $('#emailid').val()
         let csr = $("input[name=csrfmiddlewaretoken").val();
-        formData = {freq:fv,email:ev,time:tv,csrfmiddlewaretoken: csr}
+        formData = { freq: fv, email: ev, time: tv, csrfmiddlewaretoken: csr }
         console.log(formData)
         // Send POST request
         $.ajax({

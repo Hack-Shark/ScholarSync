@@ -5,7 +5,9 @@ from backend.settings import EMAIL_HOST_USER
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from .cache_builder import get_links
+from .cache_builder import get_links,compare_user_input_with_tags
+from django.contrib import messages
+import time
 
 def pref_add(request):
     print(request)
@@ -15,12 +17,22 @@ def pref_add(request):
         if form.is_valid():
             obj=form.save(commit=False)
             obj.user=request.user
+            start_time =time.time()
             print(get_links(obj.text))
-            obj.save()
-            prefs=Preference.objects.filter(user=request.user).values()
-            pref_data=list(prefs)[::-1]
-            # print(pref_data)
-            return JsonResponse({'status':'Save','pref_data':pref_data})
+            validity = compare_user_input_with_tags(obj.text)
+            print(validity)
+            print(time.time()-start_time)
+            if validity == 'valid':
+                obj.save()
+                prefs=Preference.objects.filter(user=request.user).values()
+                pref_data=list(prefs)[::-1]
+                # print(pref_data)
+                return JsonResponse({'status':'Save','pref_data':pref_data})
+            else:
+                prefs=Preference.objects.filter(user=request.user).values()
+                pref_data=list(prefs)[::-1]
+                message=f'No records found for the input "{obj.text}"'
+                return JsonResponse({'status':'invalid','pref_data':pref_data,'message':message})
         else:
             for field, errors in form.errors.items():
                 print(f"{field}: {', '.join(errors)}")

@@ -163,3 +163,19 @@ def get_links(user_input):
         # print(name,url)
     return l
 
+# creating the list of tags from JOURNAL_MAIN
+def get_combined_tags():
+    combined_tags = ' '.join(JOURNAL_MAIN['Tags'].values)
+    unique_tags = ' '.join(set(combined_tags.split()))
+    return unique_tags
+
+#checking the validity of user_input pref
+def compare_user_input_with_tags(user_input):
+    tags = ' '.join(TEMP_JOURNAL_MAIN['Tags'].values.tolist())
+    tags = set(tags.split())
+    user_words = set(user_input.lower().split())
+    
+    if any(word in tags for word in user_words):
+        return "valid"
+    else:
+        return "invalid"
