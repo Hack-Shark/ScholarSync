@@ -12,3 +12,8 @@ class Preference(models.Model):
     def __str__(self):
         return f'{self.user}\t{self.text}\t{self.after}'
     
+class CombinedText(models.Model):
+    user = models.ForeignKey(User, related_name='combined_texts', on_delete=models.CASCADE)
+    combined_text = models.TextField(blank=True)
+    def __str__(self):
+        return f'{self.user}\t{self.combined_text}'

@@ -8,6 +8,7 @@ class Frequency(models.Model):
     time = models.DurationField(default=timedelta(days=1))
     def __str__(self):
         return f'{self.time}\t{self.freq}'
+    
 class EmailTime(models.Model):
     user = models.OneToOneField(User, default=None, on_delete=models.CASCADE)
     email = models.EmailField()
