@@ -1,77 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Blog Recommendations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>Your Weekly Feed</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
+      color: #333;
     }
 
     .container {
       max-width: 600px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #ffffff;
+      background-color: #fff;
+      border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
-      color: #333333;
-      margin-top: 0;
+      color: #333;
     }
 
-    .blog-item {
-      margin-bottom: 30px;
+    .article {
+      position: relative;
+      background-color: #f9f9f9;
+      padding: 10px 15px 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+      perspective: 800px;
+      display: flex;
+      align-items: center;
     }
 
-    .blog-item h2 {
-      color: #333333;
-      font-size: 24px;
-      margin: 0;
+    .article-info {
+      flex: 1;
+    }
+
+    .time-Authors {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .time {
+      color: #777;
+    }
+
+    .Authors {
+      color: #777;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    .abstract {
+      background-color: #f2f2f2;
+      padding: 10px 10px 10px 10px;
+      border-radius: 5px;
+      color: #333;
       margin-bottom: 10px;
     }
 
-    .blog-item p {
-      color: #666666;
-      margin-top: 0;
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content:end;
+      margin-top: 10px;
     }
 
-    .button {
-      display: inline-block;
-      background-color: #4caf50;
-      color: #ffffff;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #777;
+      font-size: 12px;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Blog Recommendations</h1>
+    <h1>Your Weekly Feed from Scholar Sync</h1>
+    <hr>
+    <h3>Here are the top 5 articles based on your preferences:</h3>
 
-    <div class="blog-item">
-      <h2>Blog Post Title 1</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non metus ut leo posuere aliquet sed vel quam.</p>
-      <a href="https://example.com/blog-post-1" class="button">Read More</a>
+    {% for data in link_data %}
+    <div class="article">
+      <div class="article-info">
+        <h2>{{ data.title }}</h2>
+        <div class="time-Authors">
+          <div class="time">Published on {{ data.published_date }}</div>
+          <div class="Authors">Authors:
+            {% for author in data.authors %}
+            {% if not forloop.first %}, {% endif %}{{ author }}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="abstract">Abstract: {{ data.abstract|truncatechars:100 }}</div>
+        <div class="buttons" style="font-size: small;">
+          <a href="{{ data.download_link }}" class="article-link"><i
+              class="fas fa-download"></i> Article</a>
+          <span class="mx-2">|</span> 
+          <a href="{{ data.url }}">Click here </a> <span class="ml-1">to read the full article</span>
+        </div>
+      </div>
     </div>
+    {% endfor %}
 
-    <div class="blog-item">
-      <h2>Blog Post Title 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non metus ut leo posuere aliquet sed vel quam.</p>
-      <a href="https://example.com/blog-post-2" class="button">Read More</a>
-    </div>
-
-    <div class="blog-item">
-      <h2>Blog Post Title 3</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam non metus ut leo posuere aliquet sed vel quam.</p>
-      <a href="https://example.com/blog-post-3" class="button">Read More</a>
+    <div class="footer">
+      <p>Scholar Sync | Address | Phone Number</p>
     </div>
   </div>
 </body>
+
 </html>
