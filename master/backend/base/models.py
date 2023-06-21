@@ -12,8 +12,36 @@ class Preference(models.Model):
     def __str__(self):
         return f'{self.user}\t{self.text}\t{self.after}'
     
+
 class CombinedText(models.Model):
     user = models.OneToOneField(User, primary_key=True, related_name='combined_text', on_delete=models.CASCADE)
     combined_text = models.TextField(blank=True)
     def __str__(self):
         return f'{self.user}\t{self.combined_text}'
+
+
+class Article(models.Model):
+    article_id = models.IntegerField()
+    journal_id = models.IntegerField()
+    article_abstract = models.TextField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['article_id', 'journal_id'], name='unique_article_journal')
+        ]
+
+    def __str__(self):
+        return f'{self.journal_id}\t{self.article_id}\t{self.article_abstract[:25]}...'
+
+
+class UserArticle(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'article'], name='unique_user_article_journal')
+        ]
+
+    def __str__(self):
+        return f'{self.user}\t{self.article}'

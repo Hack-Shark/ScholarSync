@@ -1,12 +1,7 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
-from backend.settings import EMAIL_HOST_USER
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-from .cache_builder import get_links,compare_user_input_with_tags
-from django.contrib import messages
+from .cache_builder import compare_user_input_with_tags
 import time
 
 def pref_add(request):
@@ -18,7 +13,7 @@ def pref_add(request):
             obj=form.save(commit=False)
             obj.user=request.user
             start_time =time.time()
-            print(get_links(obj.text))
+            # print(get_links(obj.text))
             validity = compare_user_input_with_tags(obj.text)
             print(validity)
             print(time.time()-start_time)
@@ -72,19 +67,3 @@ def edit_pref(request):
         pref.after=date
         pref.save()
         return JsonResponse({'success':"Updated"})
-        
-
-def mail_send(data,recipents,website):
-    sub=f"Your weekly feed from {website}"
-    html_message = render_to_string('email.html', data)
-    plain_message = strip_tags(html_message)
-    email = EmailMultiAlternatives(
-    subject=sub,
-    body=plain_message,
-    from_email=EMAIL_HOST_USER,
-    to=recipents,
-    )
-    email.attach_alternative(html_message,"text/html")
-    email.send()
-
-
