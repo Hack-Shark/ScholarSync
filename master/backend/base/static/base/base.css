@@ -36,10 +36,8 @@ ul {
   margin-bottom: 20px;
 }
 
-.alert {
+.pref-head {
   color: #fff;
-  background-color: #1e1e1e;
-  border-color: #1e1e1e;
 }
 
 .alert-info {

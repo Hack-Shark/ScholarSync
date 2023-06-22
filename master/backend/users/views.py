@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm, SignupForm, EmailTimeForm
 from django.contrib.auth.models import User
 from base.forms import PrefAddForm
-from base.models import Preference
+from base.models import Preference,UserArticle
 from django.contrib import messages
 from .models import EmailTime,Frequency
 from django.contrib.auth.decorators import login_required
@@ -66,6 +66,9 @@ def profile_view(request):
         email_time.freq = frequency
         email_time.save()
 
+    user_article_count = UserArticle.objects.filter(user=request.user).count()
+    preference_count = Preference.objects.filter(user=request.user).count()
+
     if request.method == 'POST':
         form = EmailTimeForm(request.POST, instance=email_time)
         if form.is_valid():
@@ -74,4 +77,11 @@ def profile_view(request):
             return redirect('profile')
     else:
         form = EmailTimeForm(instance=email_time)
-    return render(request, 'users/profile.html', {'title':'Profile','user': request.user, 'form': form})
+    context = {
+        'title': 'Profile',
+        'user': request.user,
+        'form': form,
+        'user_article_count': user_article_count,
+        'preference_count': preference_count,
+    }
+    return render(request, 'users/profile.html', context)

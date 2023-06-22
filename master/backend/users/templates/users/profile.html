@@ -8,21 +8,21 @@
 {% block content %}
 
 <div style="color: #fff; font-size: 30px; text-align: left; margin-bottom: 20px;">
-    <h4 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid rgb(255, 255, 255);"></h4>
+    <h4 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid #676767;"></h4>
 </div>
 
 <div class="my-4"></div>
-<div class="row">
-    <div class="col-lg-8 mb-4">
-        <div class="row mb-2">
+<div class="row" style="justify-content: space-around;">
+    <div class="col-lg-7 mb-4">
+        <div class="row mb-4 mt-3">
             <div class="user-details-container mx-auto row">
                 <div class="user-details-image col-sm-3">
                     <!-- <img src="profile-pic.jpg" alt="DP"> -->
                 </div>
                 <div class="user-details-text col-sm-7">
                     <h2>User Details</h2>
-                    <p><strong>Name:</strong> {{ user.username }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong class="mx-2">Name:</strong> {{ user.username }}</p>
+                    <p><strong class="mx-2">Email:</strong> {{ user.email }}</p>
                 </div>
             </div>
         </div>
@@ -38,16 +38,16 @@
         </div>
     </div>
     <div class="col-lg-4">
-        <div class="scoreboard">
-            <h2>Scoreboard</h2>
+        <div class="scoreboard mt-5">
+            <h2>Knowledge Board</h2>
             <div class="scoreboard-scores">
                 <div class="scoreboard-scores-item">
                     <strong>Mails Received</strong>
-                    <span id="mails-score" class="score">7</span>
+                    <span id="mails-score" class="score">{{ user_article_count }}</span>
                 </div>
                 <div class="scoreboard-scores-item">
-                    <strong>No Prompts Given</strong>
-                    <span id="prompts-score" class="score">5</span>
+                    <strong>Prompts Given</strong>
+                    <span id="prompts-score" class="score">{{ preference_count }}</span>
                 </div>
             </div>
             <div class="scoreboard-plot">

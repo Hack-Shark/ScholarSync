@@ -22,53 +22,54 @@
                     console.log(data)
                     if (data.status == "Save") {
                         console.log("Form submitted Successfully");
+                        $('#messages').text(data.message);
                         $("form")[0].reset();
-
+                        $('#messages').addClass('alert-success').removeAttr('style')
+                        $("#messages").show()
+                        setTimeout(function () {
+                            $('#messages').text("'");
+                            $('#messages').removeClass('alert-success')
+                            $('#messages').css('color', 'white');
+                        }, 3000);
+                        // Append the new preference data to the table
+                        let prefData = data.pref_data;
+                        let tableBody = $('#prefs_body');
+                        tableBody.empty();
+                        for (let i = 0; i < prefData.length; i++) {
+                            let pref = prefData[i];
+                            let row = '<tr>' +
+                                '<td>' + (i + 1) + '</td>' +
+                                '<td class="textColumn">' + pref.text + '</td>' +
+                                '<td class="dateColumn">' + pref.after + '</td>' +
+                                '<td>' +
+                                '<input class="btn btn-edit btn-warning btn-sm" data-sid="' + pref.id + '" type="button" value="Edit">' +
+                                '<input class="btn btn-del btn-danger btn-sm" data-sid="' + pref.id + '" type="button" value="Delete">' +
+                                '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        }
                     }
                     if (data.status == 0) {
                         console.log("Unable to save the preference");
                     }
                     if (data.status == 'invalid') {
                         console.log('invalid input');
-                        alert(data.message);
-                        // $('#messages').text(data.message);
-                        // $("#messages").show().delay(3000).fadeOut();
+                        // alert(data.message);
+                        $('#messages').text(data.message);
                         $('form')[0].reset();
+                        $('#messages').addClass('alert-danger').removeAttr('style')
+                        $("#messages").show()
+                        setTimeout(function () {
+                            $('#messages').text("'");
+                            $('#messages').removeClass('alert-danger')
+                            $('#messages').css('color', 'white');
+                        }, 3000);
                     }
                 }
             })
         }
     })
 
-    //geting the user related prefs
-    $('#getbtn').click(function () {
-        console.log("getting preferences")
-        $.ajax({
-            url: "{% url 'get_pref' %}",
-            type: "GET",
-            dataType: "json",
-            success: function (response) {
-                console.log(response);
-                output = '';
-                x = response.pref_data;
-                for (i = 0; i < x.length; i++) {
-                    output += `<tr>
-                                    <td>`+ (i + 1) + `</td>
-                                    <td class="textColumn">`+ x[i].text + `</td>
-                                    <td class="dateColumn">`+ x[i].after + `</td>
-                                    <td>
-                                        <input class="btn btn-edit btn-warning btn-sm" data-sid="`+ x[i].id + `" type="button" value="Edit">
-                                        <input class="btn btn-del btn-danger btn-sm" data-sid="`+ x[i].id + `" type="button" value="Delete">
-                                    </td>
-                                </tr>`
-                }
-                $("#prefs_body").html(output);
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    })
 
     // deleting function
     $("#prefs_body").on("click", ".btn-del", function () {

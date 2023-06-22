@@ -2,34 +2,40 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'base/home.css' %}">
-{% endblock %}
 
 {% block content%}
 
-<h1>Hello {{ user.username }}, Welcome to the Home Page</h1>
 
 {% if not user.is_authenticated %}
-<p>Please sign in to access the content.</p>
-<a href="{% url 'login' %}">Sign in</a>
-<p>New User</p>
-<a href="{% url 'signup' %}">Sign Up</a>
+<h1 style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color: #676767;">Please sign in to access the content</h1>
+<div class="border-top pt-3">
+	<small class="text-muted">Already Have An Account?</small>
+</div>
+<a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-1 mb-3">Sign in</a>
+<span class="mx-5"> </span>
+<div class="border-top pt-3">
+	<small class="text-muted">Need An Account?</small>
+</div>
+<a href="{% url 'signup' %}" class="btn btn-success btn-lg mt-1 mb-3">Sign Up</a>
+<!-- <p>New User</p> -->
 {% endif %}
 
 <!-- Add your content for authenticated users here -->
 
 {% if user.is_authenticated %}
 
+<div style="color: #fff; font-size: 30px; text-align: left; margin-bottom: 20px;">
+    <h2 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid #676767;"></h2>
+</div>
 {% comment %} form for uploading {% endcomment %}
-
 <div class="row justify-content-between">
 	<div class="col-sm-5">
+		<div id="messages" class="alert" style="color: white;">'</div>  <!-- Add this div for displaying messages -->
 		<div class="form-container">
 			<form method="post">
 				{% csrf_token %}
 				<fieldset class="form-group">
-					<legend class="border-bottom mb-4">Enter a sentence</legend>
+					<legend class="border-bottom mb-4">Enter your interests</legend>
 					{{ form|crispy }}
 				</fieldset>
 				<div class="form-group">
@@ -37,11 +43,11 @@
 				</div>
 			</form>
 		</div>
-		<input class="btn btn-primary btn-sm mb-3" type="button" id="getbtn" value="Get Preferences" />
+		<!-- <input class="btn btn-primary btn-sm mb-3" type="button" id="getbtn" value="Get Preferences" /> -->
 	</div>
 	<div class="col-sm-7">
-		<h5 class="text-center alert alert-info">
-			Previous Article Preferences
+		<h5 class="pref-head text-center alert alert-info">
+			Your Article Preferences
 		</h5>
 		<table class="table table-hover">
 			<thead>
@@ -68,6 +74,20 @@
 		</table>
 	</div>
 </div>
+
+<script>
+	const typewriterTextElement = $('.typewriter-text');
+	const text = "Hello {{ user.username }}, Welcome to the Home Page...";
+    let index = 0;
+    function typeWriter() {
+        if (index < text.length) {
+            typewriterTextElement.append(text.charAt(index));
+            index++;
+            setTimeout(typeWriter, 50);
+        }
+    }
+    typeWriter();
+</script>
 
 {% endif %}
 

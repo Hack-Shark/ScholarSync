@@ -22,7 +22,8 @@ def pref_add(request):
                 prefs=Preference.objects.filter(user=request.user).values()
                 pref_data=list(prefs)[::-1]
                 # print(pref_data)
-                return JsonResponse({'status':'Save','pref_data':pref_data})
+                message=f'"{obj.text}" added to your prefernces'
+                return JsonResponse({'status':'Save','pref_data':pref_data,'message':message})
             else:
                 prefs=Preference.objects.filter(user=request.user).values()
                 pref_data=list(prefs)[::-1]
@@ -33,15 +34,15 @@ def pref_add(request):
                 print(f"{field}: {', '.join(errors)}")
             return JsonResponse({'status':0})
 
-def get_pref(request):
-    if request.method=='GET' :
-        prefs=Preference.objects.filter(user=request.user).values()
-        pref_data=list(prefs)[::-1]
+# def get_pref(request):
+#     if request.method=='GET' :
+#         prefs=Preference.objects.filter(user=request.user).values()
+#         pref_data=list(prefs)[::-1]
         
-        # mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['mssrinu004@gmail.com'])
-        return JsonResponse({'status':'Get','pref_data':pref_data})
-    else:
-        return JsonResponse({'status':0})
+#         # mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['mssrinu004@gmail.com'])
+#         return JsonResponse({'status':'Get','pref_data':pref_data})
+#     else:
+#         return JsonResponse({'status':0})
     
 def del_pref(request):
     if request.method == "POST":

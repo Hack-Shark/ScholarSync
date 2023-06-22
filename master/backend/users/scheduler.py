@@ -56,9 +56,13 @@ def schedule_emails():
             email_time.save()
 
         # Calculate the remaining time until the next mailing
-        next_mailing_time = EmailTime.objects.filter(time__hour=current_hour).order_by('time').first().time
-        remaining_time = datetime.combine(datetime.today(), next_mailing_time) - datetime.now()
+        next_mailing_time = EmailTime.objects.filter(time__hour=current_hour).order_by('time').first()
+        if next_mailing_time:
+            remaining_time = datetime.combine(datetime.today(), next_mailing_time.time) - datetime.now()
+        else:
+            # No email time found for the current hour, sleep for 1 minute and check again
+            remaining_time = timedelta(minutes=1)
 
         # Sleep for the remaining time until the next mailing
-        sleep_duration = max(remaining_time.total_seconds(), 0)
+        sleep_duration = max(remaining_time.total_seconds(), 60)
         time.sleep(sleep_duration)
