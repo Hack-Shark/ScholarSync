@@ -31,14 +31,10 @@ def article_data(url):
     for author_tag in author_tags:
         author_name = author_tag.text.strip()
         authors.append(author_name)
-    
-    published = soup.find_all("li", attrs={'class': 'c-bibliographic-information__list-item'})
-    for x in published:
-        if x.find("p").text.startswith("Published"):
-            published_date = x.find("p").find("time").text
+    published = soup.find('a',attrs={'data-track-action':"publication date"}).find('time').text
     download_link ="https://link.springer.com"+soup.find('a', attrs={'class': 'c-pdf-download__link'}).get('href')
 
-    return ({'title': title, 'abstract': abstract, 'authors': authors, 'published_date': published_date, 'url': url, 'download_link': download_link})
+    return ({'title': title, 'abstract': abstract, 'authors': authors, 'published_date': published, 'url': url, 'download_link': download_link})
 
 
 from .models import Article, UserArticle

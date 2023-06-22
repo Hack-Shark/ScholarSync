@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <title>Your Weekly Feed</title>
+  <title>Your Daily Feed</title>
   <style>
     body {
       background-color: #f5f5f5;
@@ -85,7 +85,7 @@
 
 <body>
   <div class="container">
-    <h1>Your Weekly Feed from Scholar Sync</h1>
+    <h1>Your Daily Feed from Scholar Sync</h1>
     <hr>
     <h3>Here are the top 5 articles based on your preferences:</h3>
 
@@ -101,7 +101,7 @@
             {% endfor %}
           </div>
         </div>
-        <div class="abstract">Abstract: {{ data.abstract|truncatechars:100 }}</div>
+        <div class="abstract">Abstract: {{ data.abstract|truncatechars:300 }}</div>
         <div class="buttons" style="font-size: small;">
           <a href="{{ data.download_link }}" class="article-link"><i
               class="fas fa-download"></i> Article</a>

@@ -14,5 +14,6 @@ class EmailTime(models.Model):
     email = models.EmailField()
     time = models.TimeField(default=datetime.time())
     freq = models.ForeignKey(Frequency, on_delete=models.CASCADE,null=True)
+    edited_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f'{self.time}\t{self.email}\t{self.freq}'
+        return f'{self.time}\t{self.email}\t{self.freq}\t{self.edited_at}'
