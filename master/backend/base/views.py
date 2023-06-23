@@ -1,7 +1,7 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
-from .cache_builder import compare_user_input_with_tags
+from .cache_builder import compare_user_input_with_tags,get_links
 import time
 
 def pref_add(request):
@@ -13,7 +13,7 @@ def pref_add(request):
             obj=form.save(commit=False)
             obj.user=request.user
             start_time =time.time()
-            # print(get_links(obj.text))
+            print(get_links(obj.text))
             validity = compare_user_input_with_tags(obj.text)
             print(validity)
             print(time.time()-start_time)
