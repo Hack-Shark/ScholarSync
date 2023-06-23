@@ -54,7 +54,7 @@ journal_threshold=4
 @memory.cache
 def get_main_df(): 
     curr_dir=os.getcwd()
-    data_file_path=os.path.join(curr_dir,'../training_data/springer_data.csv')
+    data_file_path=os.path.join(curr_dir,'springer_data.csv')
     main=pd.read_csv(data_file_path)
     main=main[main['Language']=='en']
     main=main.drop(['Language','Item DOI'],axis=1)

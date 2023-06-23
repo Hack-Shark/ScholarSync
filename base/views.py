@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import Preference
 from .cache_builder import compare_user_input_with_tags,get_links
 import time
-
+from .subprocess import mails
 def pref_add(request):
     print(request)
     print(request.POST)
