@@ -56,6 +56,7 @@ def get_main_df():
     curr_dir=os.getcwd()
     data_file_path=os.path.join(curr_dir,'springer_data.csv')
     main=pd.read_csv(data_file_path)
+    print(main.head())
     main=main[main['Language']=='en']
     main=main.drop(['Language','Item DOI'],axis=1)
     return main
