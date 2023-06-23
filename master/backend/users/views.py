@@ -81,6 +81,7 @@ def profile_view(request):
         'title': 'Profile',
         'user': request.user,
         'form': form,
+        'email':email_time.email,
         'user_article_count': user_article_count,
         'preference_count': preference_count,
     }
