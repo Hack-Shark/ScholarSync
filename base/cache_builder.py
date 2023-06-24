@@ -12,13 +12,13 @@ nltk_data_dir = "nltk_data"
 nltk.data.path.append(nltk_data_dir)
 # Check if the NLTK resources are already downloaded
 if not os.path.isdir(os.path.join(nltk_data_dir, 'corpora/stopwords')):
-    nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
+    nltk.download('stopwords', download_dir=nltk_data_dir)
 
 if not os.path.isdir(os.path.join(nltk_data_dir, 'tokenizers/punkt')):
-    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
+    nltk.download('punkt', download_dir=nltk_data_dir)
 
 if not os.path.isdir(os.path.join(nltk_data_dir, 'taggers/averaged_perceptron_tagger')):
-    nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir, quiet=True)
+    nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir)
 
 stop_words = set(stopwords.words('english'))
 
