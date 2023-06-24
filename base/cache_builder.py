@@ -1,14 +1,21 @@
 import os
 import re
-
 import nltk
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 from .models import JournalArticle
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
+
+# Check if the NLTK resources are already downloaded
+if not nltk.corpus.stopwords.words('english'):
+    nltk.download('stopwords', quiet=True)
+
+if not nltk.data.find('tokenizers/punkt'):
+    nltk.download('punkt', quiet=True)
+
+if not nltk.data.find('taggers/averaged_perceptron_tagger'):
+    nltk.download('averaged_perceptron_tagger', quiet=True)
+
 stop_words = set(stopwords.words('english'))
 import pandas as pd
 from joblib import Memory
