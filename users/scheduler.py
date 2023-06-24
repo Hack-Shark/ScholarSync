@@ -38,17 +38,17 @@ def schedule_emails():
             mailing_time = time.time()
             text = CombinedText.objects.get(user=user).combined_text
             related_links = get_links(text)
-            print(f'time to get links = {time.time()-mailing_time}')
+            # print(f'time to get links = {time.time()-mailing_time}')
             top5_links = process_articles(related_links, user)
-            print(f'time to process links = {time.time()-mailing_time}')
+            # print(f'time to process links = {time.time()-mailing_time}')
             link_data = [article_data(link) for link in top5_links]
-            print(link_data)
-            print(f'time to get link_data = {time.time()-mailing_time}')
-            print(f'got links in {time.time()-mailing_time}')
+            # print(link_data)
+            # print(f'time to get link_data = {time.time()-mailing_time}')
+            # print(f'got links in {time.time()-mailing_time}')
             subject = "Your Daily feed from Scholar Sync"
 
             send_email(email=email, subject=subject, link_data=link_data)
-            print(f'sent mail to {email} at {current_time} in {time.time()-mailing_time}')
+            # print(f'sent mail to {email} at {current_time} in {time.time()-mailing_time}')
 
             # Update the time to send for the next email
             next_email_time = datetime.combine(datetime.today(), email_time.time) + email_time.freq.time
@@ -66,4 +66,3 @@ def schedule_emails():
         # Sleep for the remaining time until the next mailing
         sleep_duration = max(remaining_time.total_seconds(), 60)
         time.sleep(sleep_duration)
-
