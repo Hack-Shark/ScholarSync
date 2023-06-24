@@ -66,3 +66,4 @@ def schedule_emails():
         # Sleep for the remaining time until the next mailing
         sleep_duration = max(remaining_time.total_seconds(), 60)
         time.sleep(sleep_duration)
+

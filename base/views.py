@@ -1,22 +1,17 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
-from .cache_builder import compare_user_input_with_tags,get_links
+from .cache_builder import compare_user_input_with_tags
 import time
-from .subprocess import mails
+# from .subprocess import mails
 def pref_add(request):
-    print(request)
-    print(request.POST)
     if request.method == 'POST':
         form = PrefAddForm(request.POST)
         if form.is_valid():
             obj=form.save(commit=False)
             obj.user=request.user
             start_time =time.time()
-            print(get_links(obj.text))
             validity = compare_user_input_with_tags(obj.text)
-            print(validity)
-            print(time.time()-start_time)
             if validity == 'valid':
                 obj.save()
                 prefs=Preference.objects.filter(user=request.user).values()
@@ -47,7 +42,6 @@ def pref_add(request):
 def del_pref(request):
     if request.method == "POST":
         id = request.POST.get('sid')
-        print(id)
         dp = Preference.objects.filter(user=request.user).get(id=id)
         dp.delete()
         prefs=Preference.objects.filter(user=request.user).values()
@@ -58,12 +52,10 @@ def del_pref(request):
 
 def edit_pref(request):
     if request.method == 'POST':
-        print(request.POST)
         id = request.POST.get('id','')
         text = request.POST.get('text','')
         date = request.POST.get('date','')
         pref= Preference.objects.filter(user=request.user).get(id=id)
-        print(pref)
         pref.text=text
         pref.after=date
         pref.save()

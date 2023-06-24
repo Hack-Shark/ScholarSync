@@ -5,7 +5,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
-
+from .models import JournalArticle
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('stopwords')
@@ -50,13 +50,26 @@ def combine(row,indices):
 # Create a memory object with the cache directory
 memory = Memory(CACHE_DIR)
 journal_threshold=4
+# accesing the journal article objects
+
 
 @memory.cache
 def get_main_df(): 
-    curr_dir=os.getcwd()
-    data_file_path=os.path.join(curr_dir,'springer_data.csv')
-    main=pd.read_csv(data_file_path)
-    print(main.head())
+    journal_articles = JournalArticle.objects.all()
+    data = []
+    # Iterate over each JournalArticle object and extract the field values
+    for article in journal_articles:
+        data.append([
+            article.title,
+            article.publication_title,
+            article.item_doi,
+            article.authors,
+            article.publication_year,
+            article.url,
+            article.keywords,
+            article.language
+        ])
+    main = pd.DataFrame(data, columns=["Item Title","Publication Title","Item DOI","Authors","Publication Year","URL","Keywords","Language"])
     main=main[main['Language']=='en']
     main=main.drop(['Language','Item DOI'],axis=1)
     return main

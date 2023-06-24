@@ -45,3 +45,13 @@ class UserArticle(models.Model):
 
     def __str__(self):
         return f'{self.user}\t{self.article}'
+
+class JournalArticle(models.Model):
+    title = models.CharField(null=True)
+    publication_title = models.CharField(null=True)
+    item_doi = models.CharField(primary_key=True)
+    authors = models.CharField(null=True)
+    publication_year = models.PositiveIntegerField(null=True)
+    url = models.URLField()
+    keywords = models.CharField(null=True)
+    language = models.CharField(null=True)
