@@ -1,11 +1,12 @@
 import joblib
+import os
 from sklearn.metrics.pairwise import cosine_similarity
 from .models import JournalArticle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from django.shortcuts import get_object_or_404
-
-JOURNAL_VECTORIZER = joblib.load('joblib\\vectorizer.joblib')
-JOURNAL_TFIDF_MATRIX = joblib.load('joblib\\journal_tfidf.joblib')
+BASE_DIR=os.getcwd()
+JOURNAL_VECTORIZER = joblib.load(os.path.join(BASE_DIR,'joblib','vectorizer.joblib'))
+JOURNAL_TFIDF_MATRIX = joblib.load(os.path.join(BASE_DIR,'joblib','journal_tfidf.joblib'))
 
 journal_threshold = 3
 
@@ -25,8 +26,10 @@ def get_article_recommendations(user_input):
     l=[]
     recommended_journals = get_journal_index(user_input)
     for journal_id in recommended_journals:
-        tfidf_matrix=joblib.load(f"joblib\\journal_tfidf_{journal_id}.joblib")
-        vectorizer=joblib.load(f"joblib\\vectorizer_{journal_id}.joblib")
+        tfidf_matrix_file_path=os.path.join(BASE_DIR,'joblib',f"journal_tfidf_{journal_id}.joblib")
+        vectorizer_file_path=os.path.join(BASE_DIR,'joblib',f"vectorizer_{journal_id}.joblib")
+        tfidf_matrix=joblib.load(tfidf_matrix_file_path)
+        vectorizer=joblib.load(vectorizer_file_path)
         user_tfidf = vectorizer.transform([user_input])
         cosine_similarities = cosine_similarity(user_tfidf, tfidf_matrix).flatten()
         indices = cosine_similarities.argsort()[::-1]
