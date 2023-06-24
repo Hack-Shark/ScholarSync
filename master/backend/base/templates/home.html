@@ -25,12 +25,12 @@
 {% if user.is_authenticated %}
 
 <div style="color: #fff; font-size: 30px; text-align: left; margin-bottom: 20px;">
-    <h2 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid #676767;"></h2>
+	<h2 class="typewriter-text px-2" style="display: inline-block; border-right: .15em solid #676767;"></h2>
 </div>
 {% comment %} form for uploading {% endcomment %}
 <div class="row justify-content-between">
 	<div class="col-sm-5">
-		<div id="messages" class="alert" style="color: white;">'</div>  <!-- Add this div for displaying messages -->
+		<div id="messages" class="alert" style="color: white;">'</div> <!-- Add this div for displaying messages -->
 		<div class="form-container">
 			<form method="post">
 				{% csrf_token %}
@@ -39,7 +39,7 @@
 					{{ form|crispy }}
 				</fieldset>
 				<div class="form-group">
-					<input class="btn btn-success" type="button" id="btnsave" value="Save"/>
+					<input class="btn btn-success" type="button" id="btnsave" value="Save" />
 				</div>
 			</form>
 		</div>
@@ -78,15 +78,20 @@
 <script>
 	const typewriterTextElement = $('.typewriter-text');
 	const text = "Hello {{ user.username }}, Welcome to the Home Page...";
-    let index = 0;
-    function typeWriter() {
-        if (index < text.length) {
-            typewriterTextElement.append(text.charAt(index));
-            index++;
-            setTimeout(typeWriter, 50);
-        }
-    }
-    typeWriter();
+	let index = 0;
+	function typeWriter() {
+		if (index < text.length) {
+			typewriterTextElement.append(text.charAt(index));
+			index++;
+			setTimeout(typeWriter, 50);
+		}
+	}
+	typeWriter();
+	$(document).ready(function () {
+		$('label[for="text"]').text('Preference or Interests');
+		$('label[for="after"]').text('Published Year');
+	});
+
 </script>
 
 {% endif %}

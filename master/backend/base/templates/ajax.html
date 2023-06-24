@@ -120,7 +120,10 @@
             textCell.html("<input type='text' value='" + textValue + "'>");
 
             var dateValue = dateCell.text();
-            dateCell.html("<input type='date' value='" + dateValue + "'>");
+            var currentYear = new Date().getFullYear();
+            var minYear = 1900;
+            var maxYear = currentYear + 1;
+            dateCell.html("<input type='number' min='" + minYear + "' max='" + maxYear + "' value='" + dateValue + "'>");
 
             $(this).removeClass("btn-edit").addClass("updateBtn");
             $(this).prop("value", "Update");
@@ -132,13 +135,12 @@
             var dateCell = row.find(".dateColumn");
 
             var updatedTextValue = textCell.find("input").val();
+            var updatedDateValue = parseInt(dateCell.find("input").val());
 
-            var updatedDateValue = dateCell.find("input").val();
-
-            let id = $(this).attr("data-sid")
+            let id = $(this).attr("data-sid");
             let csr = $("input[name=csrfmiddlewaretoken").val();
-            mydata = { id: id, text: updatedTextValue, date: updatedDateValue, csrfmiddlewaretoken: csr }
-            console.log(mydata)
+            mydata = { id: id, text: updatedTextValue, date: updatedDateValue, csrfmiddlewaretoken: csr };
+            console.log(mydata);
             $.ajax({
                 url: "{% url 'edit_pref' %}",
                 method: "POST",
@@ -162,6 +164,7 @@
             $(this).prop("value", "Edit");
         });
     });
+
 
     //profile data
     // AJAX function to enable form editing
