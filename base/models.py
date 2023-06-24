@@ -47,11 +47,14 @@ class UserArticle(models.Model):
         return f'{self.user}\t{self.article}'
 
 class JournalArticle(models.Model):
+    publication_index = models.IntegerField(null=False,default=-1)
+    article_index = models.IntegerField(null=False,default=-1)
     title = models.CharField(null=True)
     publication_title = models.CharField(null=True)
-    item_doi = models.CharField(primary_key=True)
+    item_doi=models.CharField(primary_key=True)
     authors = models.CharField(null=True)
     publication_year = models.PositiveIntegerField(null=True)
     url = models.URLField()
     keywords = models.CharField(null=True)
-    language = models.CharField(null=True)
+    
+        

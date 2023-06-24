@@ -89,7 +89,18 @@ DATABASES = {
         "PORT": config('DATABASE_PORT'),
     }
 }
+CACHE_TTL = 60 * 15000
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://default:jUBvaknXS85RUImEtUmh@containers-us-west-190.railway.app:5637",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
