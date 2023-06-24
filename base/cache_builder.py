@@ -6,17 +6,22 @@ from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 from .models import JournalArticle
 
+# Set the path to the custom NLTK data directory
+nltk_data_dir = "nltk_data"
+# Add the custom NLTK data directory to nltk.data.path
+nltk.data.path.append(nltk_data_dir)
 # Check if the NLTK resources are already downloaded
-if not nltk.corpus.stopwords.words('english'):
-    nltk.download('stopwords', quiet=True)
+if not os.path.isdir(os.path.join(nltk_data_dir, 'corpora/stopwords')):
+    nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 
-if not nltk.data.find('tokenizers/punkt'):
-    nltk.download('punkt', quiet=True)
+if not os.path.isdir(os.path.join(nltk_data_dir, 'tokenizers/punkt')):
+    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
 
-if not nltk.data.find('taggers/averaged_perceptron_tagger'):
-    nltk.download('averaged_perceptron_tagger', quiet=True)
+if not os.path.isdir(os.path.join(nltk_data_dir, 'taggers/averaged_perceptron_tagger')):
+    nltk.download('averaged_perceptron_tagger', download_dir=nltk_data_dir, quiet=True)
 
 stop_words = set(stopwords.words('english'))
+
 import pandas as pd
 from joblib import Memory
 from sklearn.feature_extraction.text import TfidfVectorizer
