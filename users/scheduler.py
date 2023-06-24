@@ -37,14 +37,12 @@ def schedule_emails():
             user = email_time.user
             mailing_time = time.time()
             text = CombinedText.objects.get(user=user).combined_text
-            print(text,"from schedular")
             related_links = get_links(text)
             if(related_links!=None):
             # print(f'time to get links = {time.time()-mailing_time}')
                 top5_links = process_articles(related_links, user)
                 # print(f'time to process links = {time.time()-mailing_time}')
                 link_data = [article_data(link) for link in top5_links]
-                print(link_data)
                 # print(link_data)
                 # print(f'time to get link_data = {time.time()-mailing_time}')
                 # print(f'got links in {time.time()-mailing_time}')
