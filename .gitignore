@@ -4,3 +4,4 @@
 **/cache
 output.csv
 *.csv
+nltk_data/
