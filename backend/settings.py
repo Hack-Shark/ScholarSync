@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     'https://scholarsync-hosting-production.up.railway.app',
 ]
+CSRF_TRUSTED_ORIGINS = ['https://scholarsync-hosting-production.up.railway.app']
 
 # Application definition
 
