@@ -33,7 +33,7 @@ def get_article_recommendations(user_input):
         user_tfidf = vectorizer.transform([user_input])
         cosine_similarities = cosine_similarity(user_tfidf, tfidf_matrix).flatten()
         indices = cosine_similarities.argsort()[::-1]
-        top_recommendation_articles = [(cosine_similarities[i], i, journal_id) for i in indices if cosine_similarities[i] > 0][:min(10, len(indices))]
+        top_recommendation_articles = [(cosine_similarities[i], i, journal_id) for i in indices][:min(5, len(indices))]
         l.extend(top_recommendation_articles)
     l.sort(reverse=True)
     return l
@@ -52,15 +52,13 @@ def get_links(user_input):
             pass
         l.append((article_obj.article_tags,article_obj.url,article_obj.article_index,article_obj.publication_index))
     return l
+word_list_file_path=os.path.join(BASE_DIR,'joblib',f"word_list.joblib")
+tags = joblib.load(word_list_file_path)
 def compare_user_input_with_tags(user_input):
-    # tags = ' '.join(JOURNAL_MAIN['Tags'].values.tolist())
-    # tags = set(tags.split())
     
-    # user_words = set(user_input.lower().split())
+    user_words = set(user_input.lower().split())
     
-    # if any(word in tags for word in user_words):
-    #     return "valid"
-    # else:
-    #     return "invalid"
-    return "valid"
-    pass
+    if any(word in tags for word in user_words):
+        return "valid"
+    else:
+        return "invalid"

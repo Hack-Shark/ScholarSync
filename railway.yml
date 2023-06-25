@@ -1,2 +1,0 @@
-- name: send_emails
-  command: python manage.py send_emails_command

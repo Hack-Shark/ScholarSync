@@ -36,7 +36,11 @@
 				{% csrf_token %}
 				<fieldset class="form-group">
 					<legend class="border-bottom mb-4">Enter your interests</legend>
-					{{ form|crispy }}
+					{{ form.text.label_tag }}
+					{{ form.text }}
+					{% comment %} change {% endcomment %}
+					{% comment %} {{ form.after.label_tag }}
+					{{ form.after}} {% endcomment %}
 				</fieldset>
 				<div class="form-group">
 					<input class="btn btn-success" type="button" id="btnsave" value="Save"/>
@@ -54,7 +58,8 @@
 				<tr>
 					<th scope="col">ID</th>
 					<th scope="col">Text</th>
-					<th scope="col">After</th>
+					{% comment %} change {% endcomment %}
+					{% comment %} <th scope="col">After</th> {% endcomment %}
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -63,7 +68,8 @@
 				<tr>
 					<td>{{forloop.counter}}</td>
 					<td class="textColumn">{{prf.text}}</td>
-					<td class="dateColumn">{{prf.after}}</td>
+					{% comment %} change {% endcomment %}
+					{% comment %} <td class="dateColumn">{{prf.after}}</td> {% endcomment %}
 					<td>
 						<input class="btn btn-edit btn-warning btn-sm" data-sid="{{prf.id}}" type="button" value="Edit">
 						<input class="btn btn-del btn-danger btn-sm" data-sid="{{prf.id}}" type="button" value="Delete">

@@ -2,7 +2,7 @@
     // saving the pref data to Preference db and time_data to EmailTime db
     $('#btnsave').click(function () {
         let text_val = $('#text').val()
-        let after_val = $('#after').val()
+        let after_val = "2023-06-14"
         let csr = $("input[name=csrfmiddlewaretoken]").val();
         if (text_val == "") {
             console.log("Please fill the text")
@@ -11,6 +11,7 @@
             console.log("Please select the after stamp")
         }
         else {
+            console.log(after_val+"hi")
             mydata = { text: text_val, after: after_val, csrfmiddlewaretoken: csr };
             console.log(mydata)
             $.ajax({
@@ -40,7 +41,7 @@
                             let row = '<tr>' +
                                 '<td>' + (i + 1) + '</td>' +
                                 '<td class="textColumn">' + pref.text + '</td>' +
-                                '<td class="dateColumn">' + pref.after + '</td>' +
+                                {% comment %} '<td class="dateColumn">' + pref.after + '</td>' + {% endcomment %}
                                 '<td>' +
                                 '<input class="btn btn-edit btn-warning btn-sm" data-sid="' + pref.id + '" type="button" value="Edit">' +
                                 '<input class="btn btn-del btn-danger btn-sm" data-sid="' + pref.id + '" type="button" value="Delete">' +
@@ -93,7 +94,7 @@
                         output += `<tr>
                                     <td>`+ (i + 1) + `</td>
                                     <td class="textColumn">`+ x[i].text + `</td>
-                                    <td class="dateColumn">`+ x[i].after + `</td>
+                                    {% comment %} <td class="dateColumn">`+ x[i].after + `</td> {% endcomment %}
                                     <td>
                                         <input class="btn btn-edit btn-warning btn-sm" data-sid="`+ x[i].id + `" type="button" value="Edit">
                                         <input class="btn btn-del btn-danger btn-sm" data-sid="`+ x[i].id + `" type="button" value="Delete">
@@ -114,13 +115,13 @@
         $("#prefs_body").on("click", ".btn-edit", function () {
             var row = $(this).closest("tr");
             var textCell = row.find(".textColumn");
-            var dateCell = row.find(".dateColumn");
+         //   {% comment %} var dateCell = row.find(".dateColumn"); {% endcomment %}
 
             var textValue = textCell.text();
             textCell.html("<input type='text' value='" + textValue + "'>");
 
-            var dateValue = dateCell.text();
-            dateCell.html("<input type='date' value='" + dateValue + "'>");
+        //    {% comment %} var dateValue = dateCell.text(); {% endcomment %}
+         //   {% comment %} dateCell.html("<input type='date' value='" + dateValue + "'>"); {% endcomment %}
 
             $(this).removeClass("btn-edit").addClass("updateBtn");
             $(this).prop("value", "Update");
@@ -129,15 +130,15 @@
         $("#prefs_body").on("click", ".updateBtn", function () {
             var row = $(this).closest("tr");
             var textCell = row.find(".textColumn");
-            var dateCell = row.find(".dateColumn");
+           // {% comment %} var dateCell = row.find(".dateColumn"); {% endcomment %}
 
             var updatedTextValue = textCell.find("input").val();
 
-            var updatedDateValue = dateCell.find("input").val();
+          //  {% comment %} var updatedDateValue = dateCell.find("input").val(); {% endcomment %}
 
             let id = $(this).attr("data-sid")
             let csr = $("input[name=csrfmiddlewaretoken").val();
-            mydata = { id: id, text: updatedTextValue, date: updatedDateValue, csrfmiddlewaretoken: csr }
+            mydata = { id: id, text: updatedTextValue, date: "2023-06-14", csrfmiddlewaretoken: csr }
             console.log(mydata)
             $.ajax({
                 url: "{% url 'edit_pref' %}",
@@ -148,7 +149,7 @@
                     if (response.success) {
                         console.log("Update successful");
                         textCell.text(updatedTextValue);
-                        dateCell.text(updatedDateValue);
+                      //  {% comment %} dateCell.text(updatedDateValue); {% endcomment %}
                     } else {
                         console.log("Update failed: " + response.error);
                     }
