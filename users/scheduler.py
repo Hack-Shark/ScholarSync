@@ -64,6 +64,6 @@ def schedule_emails():
             # No email time found for the current hour, sleep for 1 minute and check again
             remaining_time = timedelta(hours=1)
 
-        # Sleep for the remaining time until the next mailing
-        sleep_duration = max(remaining_time.total_seconds(), 3600)
+        # Sleep for the remaining time until the next mailing wait 40 min again check
+        sleep_duration = max(remaining_time.total_seconds(), 2400)
         time.sleep(sleep_duration)
