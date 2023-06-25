@@ -5,7 +5,7 @@ from .models import EmailTime
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-from base.cache_builder import get_links
+from base.article_recommender import get_links
 from base.models import CombinedText
 from base.utils import process_articles, article_data
 
@@ -61,9 +61,9 @@ def schedule_emails():
         if next_mailing_time:
             remaining_time = datetime.combine(datetime.today(), next_mailing_time.time) - datetime.now()
         else:
-            # No email time found for the current hour, sleep for 1 minute and check again
-            remaining_time = timedelta(hours=1)
+            # No email time found for the current hour, sleep for 1 hour and check again
+            remaining_time = timedelta(minutes=1)
 
         # Sleep for the remaining time until the next mailing wait 40 min again check
-        sleep_duration = max(remaining_time.total_seconds(), 2400)
+        sleep_duration = max(remaining_time.total_seconds(), 60)
         time.sleep(sleep_duration)

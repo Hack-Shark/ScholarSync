@@ -2,28 +2,15 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import os
-
-def get_words_from_file(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-            words = content.split('\", \"')
-            return words
-    except IOError:
-        print(f"Error: Unable to read the file '{file_path}'")
-        return []
-
-# Example usage
-BASE_DIR = os.getcwd()
-file_path = os.path.join(BASE_DIR,'base', 'stop_words.txt')  # Replace with the actual file path
-stop_words = get_words_from_file(file_path)
+from .redis_cache import load_stop_words
+STOP_WORDS_CACHE=load_stop_words()
 
 def preprocessing(text):
     clean_text = ''
     words = re.findall(r'\b\w+\b', text.lower())
     words = text.lower().split()
     for word in words:
-        if (re.match(r'^[a-zA-Z]+$', word) and word not in stop_words and len(word) > 1 and word[1] != '.'):
+        if (re.match(r'^[a-zA-Z]+$', word) and word not in STOP_WORDS_CACHE and len(word) > 1 and word[1] != '.'):
             clean_text = clean_text+' '+word
     return clean_text
 

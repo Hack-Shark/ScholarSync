@@ -1,7 +1,7 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
-from .cache_builder import compare_user_input_with_tags
+from .article_recommender import compare_user_input_with_tags
 import time
 # from .subprocess import mails
 def pref_add(request):
@@ -60,3 +60,6 @@ def edit_pref(request):
         pref.after=date
         pref.save()
         return JsonResponse({'success':"Updated"})
+    
+    
+    
