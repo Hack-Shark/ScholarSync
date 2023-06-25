@@ -1,12 +1,22 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import nltk
-from nltk.corpus import stopwords
+import os
 
-nltk.download('stopwords')
-stop_words = set(stopwords.words('english'))
+def get_words_from_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            words = content.split('\", \"')
+            return words
+    except IOError:
+        print(f"Error: Unable to read the file '{file_path}'")
+        return []
 
+# Example usage
+BASE_DIR = os.getcwd()
+file_path = os.path.join(BASE_DIR,'base', 'stop_words.txt')  # Replace with the actual file path
+stop_words = get_words_from_file(file_path)
 
 def preprocessing(text):
     clean_text = ''
