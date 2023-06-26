@@ -1,10 +1,8 @@
 import redis
 from decouple import config
 import pickle
-REDIS_CLIENT=redis.Redis(host=config('REDIS_HOST'),port=config('REDIS_PORT'),password=config('REDIS_PASSWORD'))
-import pickle
 
-STOP_WORDS_CACHE = None
+REDIS_CLIENT = redis.Redis(host=config('REDIS_HOST'), port=config('REDIS_PORT'), password=config('REDIS_PASSWORD'))
 
 def save_to_local_cache(filename, data):
     with open(filename, 'wb') as file:
@@ -20,6 +18,8 @@ def load_from_local_cache(filename):
     except FileNotFoundError:
         print(f"Data not found in local cache: {filename}")
         return None
+
+STOP_WORDS_CACHE = None
 
 def load_stop_words():
     global STOP_WORDS_CACHE
@@ -43,7 +43,7 @@ def load_words_cache():
     if WORDS_CACHE is None:
         words_list = load_from_local_cache('words_cache.pkl')
         if words_list is None:
-            serialized_bytes = REDIS_CLIENT.get(f'stop_words_list_bytes.joblib')
+            serialized_bytes = REDIS_CLIENT.get(f'word_list_bytes.joblib')
             if serialized_bytes is not None:
                 words_list = pickle.loads(serialized_bytes)
                 words_list = list(words_list)
