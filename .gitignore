@@ -5,3 +5,4 @@
 output.csv
 *.csv
 nltk_data/
+training_data/
