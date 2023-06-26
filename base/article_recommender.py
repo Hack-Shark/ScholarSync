@@ -2,15 +2,12 @@ import os
 from sklearn.metrics.pairwise import cosine_similarity
 from .models import JournalArticle
 from django.shortcuts import get_object_or_404
-from .redis_cache import get_words_cache,get_journal_vectorizer,get_journal_tfidf_matrix,get_specific_journal
-
-BASE_DIR=os.getcwd()
+from .redis_cache import load_words_cache,load_journal_vectorizer,load_journal_tfidf_matrix,get_specific_journal
 
 journal_threshold = 3
-
-WORDS_CACHE=get_words_cache()
-JOURNAL_TFIDF_MATRIX=get_journal_tfidf_matrix()
-JOURNAL_VECTORIZER=get_journal_vectorizer()
+WORDS_CACHE=load_words_cache()
+JOURNAL_TFIDF_MATRIX=load_journal_tfidf_matrix()
+JOURNAL_VECTORIZER=load_journal_vectorizer()
 
 def get_journal_index(user_input):
     user_tfidf = JOURNAL_VECTORIZER.transform([user_input])

@@ -6,58 +6,81 @@ import pickle
 
 STOP_WORDS_CACHE = None
 
+def save_to_local_cache(filename, data):
+    with open(filename, 'wb') as file:
+        pickle.dump(data, file)
+    print(f"Data saved to local cache: {filename}")
+
+def load_from_local_cache(filename):
+    try:
+        with open(filename, 'rb') as file:
+            data = pickle.load(file)
+            print(f"Data loaded from local cache: {filename}")
+            return data
+    except FileNotFoundError:
+        print(f"Data not found in local cache: {filename}")
+        return None
+
 def load_stop_words():
     global STOP_WORDS_CACHE
-    
     if STOP_WORDS_CACHE is None:
-        try:
-            with open('stop_words_cache.pkl', 'rb') as file:
-                STOP_WORDS_CACHE = pickle.load(file)
-                print("Stop words loaded from local cache")
-        except FileNotFoundError:
-            STOP_WORDS_CACHE = fetch_stop_words_from_redis()
-            save_stop_words_to_local_cache()
-            print("Stop words loaded from Redis and saved to local cache")
-    
+        stop_words = load_from_local_cache('stop_words_cache.pkl')
+        if stop_words is None:
+            serialized_bytes = REDIS_CLIENT.get(f'stop_words_list_bytes.joblib')
+            if serialized_bytes is not None:
+                stop_words = pickle.loads(serialized_bytes)
+                stop_words = list(stop_words)
+                save_to_local_cache('stop_words_cache.pkl', stop_words)
+                print("Stop words saved to local cache")
+        STOP_WORDS_CACHE = stop_words
     return STOP_WORDS_CACHE
 
-def fetch_stop_words_from_redis():
-    # Connect to Redis and fetch the serialized stop words
-    
-    serialized_bytes = REDIS_CLIENT.get(f'stop_words_list_bytes.joblib')
-    stop_words_list = pickle.loads(serialized_bytes)
-    stop_words_list = list(stop_words_list)
-    
-    return stop_words_list
 
-def save_stop_words_to_local_cache():
-    global STOP_WORDS_CACHE
-    
-    with open('stop_words_cache.pkl', 'wb') as file:
-        pickle.dump(STOP_WORDS_CACHE, file)
-    
-    print("Stop words saved to local cache")
+WORDS_CACHE = None
 
-# Call this function to get the stop words from the cache
+def load_words_cache():
+    global WORDS_CACHE
+    if WORDS_CACHE is None:
+        words_list = load_from_local_cache('words_cache.pkl')
+        if words_list is None:
+            serialized_bytes = REDIS_CLIENT.get(f'stop_words_list_bytes.joblib')
+            if serialized_bytes is not None:
+                words_list = pickle.loads(serialized_bytes)
+                words_list = list(words_list)
+                save_to_local_cache('words_cache.pkl', words_list)
+                print("Words cache saved to local cache")
+        WORDS_CACHE = words_list
+    return WORDS_CACHE
 
+JOURNAL_TFIDF_MATRIX = None
 
-def get_words_cache():
-    serialized_bytes = REDIS_CLIENT.get(f'stop_words_list_bytes.joblib')
-    words_list = pickle.loads(serialized_bytes)
-    words_list = list(words_list)
-    print("Words_setup")
-    return words_list
-def get_journal_tfidf_matrix():
-    serialized_tfidf_matrix = REDIS_CLIENT.get('journal_tfidf_matrix.joblib')
-    # Deserialize the TF-IDF vectorizer using pickle
-    journal_tfidf_matrix = pickle.loads(serialized_tfidf_matrix)
-    print("tfidf setup")
-    return journal_tfidf_matrix
-def get_journal_vectorizer():
-    serialized_vectorizer = REDIS_CLIENT.get('vectorizer.joblib')
-    vectorizer=pickle.loads(serialized_vectorizer)
-    print("vectorizer setup")
-    return vectorizer
+def load_journal_tfidf_matrix():
+    global JOURNAL_TFIDF_MATRIX
+    if JOURNAL_TFIDF_MATRIX is None:
+        matrix = load_from_local_cache('journal_tfidf_matrix.pkl')
+        if matrix is None:
+            serialized_matrix = REDIS_CLIENT.get('journal_tfidf_matrix.joblib')
+            if serialized_matrix is not None:
+                matrix = pickle.loads(serialized_matrix)
+                save_to_local_cache('journal_tfidf_matrix.pkl', matrix)
+                print("Journal TF-IDF matrix saved to local cache")
+        JOURNAL_TFIDF_MATRIX = matrix
+    return JOURNAL_TFIDF_MATRIX
+
+JOURNAL_VECTORIZER = None
+
+def load_journal_vectorizer():
+    global JOURNAL_VECTORIZER
+    if JOURNAL_VECTORIZER is None:
+        vectorizer = load_from_local_cache('journal_vectorizer.pkl')
+        if vectorizer is None:
+            serialized_vectorizer = REDIS_CLIENT.get('vectorizer.joblib')
+            if serialized_vectorizer is not None:
+                vectorizer = pickle.loads(serialized_vectorizer)
+                save_to_local_cache('journal_vectorizer.pkl', vectorizer)
+                print("Journal vectorizer saved to local cache")
+        JOURNAL_VECTORIZER = vectorizer
+    return JOURNAL_VECTORIZER
 
 from collections import OrderedDict
 
