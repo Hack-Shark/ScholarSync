@@ -1,0 +1,204 @@
+<script>
+    // saving the pref data to Preference db and time_data to EmailTime db
+    $('#btnsave').click(function () {
+        let text_val = $('#text').val()
+        let after_val = "2023-06-14"
+        let csr = $("input[name=csrfmiddlewaretoken]").val();
+        if (text_val == "") {
+            console.log("Please fill the text")
+        }
+        else if (after_val == "") {
+            console.log("Please select the after stamp")
+        }
+        else {
+            console.log(after_val+"hi")
+            mydata = { text: text_val, after: after_val, csrfmiddlewaretoken: csr };
+            console.log(mydata)
+            $.ajax({
+                url: "{% url 'pref_add' %}",
+                dataType: "json",
+                method: "POST",
+                data: mydata,
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == "Save") {
+                        console.log("Form submitted Successfully");
+                        $('#messages').text(data.message);
+                        $("form")[0].reset();
+                        $('#messages').addClass('alert-success').removeAttr('style')
+                        $("#messages").show()
+                        setTimeout(function () {
+                            $('#messages').text("'");
+                            $('#messages').removeClass('alert-success')
+                            $('#messages').css('color', 'white');
+                        }, 3000);
+                        // Append the new preference data to the table
+                        let prefData = data.pref_data;
+                        let tableBody = $('#prefs_body');
+                        tableBody.empty();
+                        for (let i = 0; i < prefData.length; i++) {
+                            let pref = prefData[i];
+                            let row = '<tr>' +
+                                '<td>' + (i + 1) + '</td>' +
+                                '<td class="textColumn">' + pref.text + '</td>' +
+                                {% comment %} '<td class="dateColumn">' + pref.after + '</td>' + {% endcomment %}
+                                '<td>' +
+                                '<input class="btn btn-edit btn-warning btn-sm" data-sid="' + pref.id + '" type="button" value="Edit">' +
+                                '<input class="btn btn-del btn-danger btn-sm" data-sid="' + pref.id + '" type="button" value="Delete">' +
+                                '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        }
+                    }
+                    if (data.status == 0) {
+                        console.log("Unable to save the preference");
+                    }
+                    if (data.status == 'invalid') {
+                        console.log('invalid input');
+                        // alert(data.message);
+                        $('#messages').text(data.message);
+                        $('form')[0].reset();
+                        $('#messages').addClass('alert-danger').removeAttr('style')
+                        $("#messages").show()
+                        setTimeout(function () {
+                            $('#messages').text("'");
+                            $('#messages').removeClass('alert-danger')
+                            $('#messages').css('color', 'white');
+                        }, 3000);
+                    }
+                }
+            })
+        }
+    })
+
+
+    // deleting function
+    $("#prefs_body").on("click", ".btn-del", function () {
+        // console.log("delete btn is clicked")
+        let id = $(this).attr("data-sid")
+        let csr = $("input[name=csrfmiddlewaretoken").val();
+        // console.log(id);
+        mydata = { sid: id, csrfmiddlewaretoken: csr }
+        mythis = this
+        $.ajax({
+            url: "{% url 'del_pref' %}",
+            method: "POST",
+            data: mydata,
+            success: function (data) {
+                // console.log(data);
+                if (data.status == 1) {
+                    console.log("deleted successfully")
+                    output = '';
+                    x = data.pref_data;
+                    for (i = 0; i < x.length; i++) {
+                        output += `<tr>
+                                    <td>`+ (i + 1) + `</td>
+                                    <td class="textColumn">`+ x[i].text + `</td>
+                                    {% comment %} <td class="dateColumn">`+ x[i].after + `</td> {% endcomment %}
+                                    <td>
+                                        <input class="btn btn-edit btn-warning btn-sm" data-sid="`+ x[i].id + `" type="button" value="Edit">
+                                        <input class="btn btn-del btn-danger btn-sm" data-sid="`+ x[i].id + `" type="button" value="Delete">
+                                    </td>
+                                </tr>`
+                    }
+                    $(mythis).closest("tr").fadeOut(500, function () {
+                        $("#prefs_body").html(output).fadeIn(500);
+                    });
+                }
+                else console.log("unable to delete")
+            },
+        })
+    })
+
+    //editing function 
+    $("#prefs_body").ready(function () {
+        $("#prefs_body").on("click", ".btn-edit", function () {
+            var row = $(this).closest("tr");
+            var textCell = row.find(".textColumn");
+         //   {% comment %} var dateCell = row.find(".dateColumn"); {% endcomment %}
+
+            var textValue = textCell.text();
+            textCell.html("<input type='text' value='" + textValue + "'>");
+
+        //    {% comment %} var dateValue = dateCell.text(); {% endcomment %}
+         //   {% comment %} dateCell.html("<input type='date' value='" + dateValue + "'>"); {% endcomment %}
+
+            $(this).removeClass("btn-edit").addClass("updateBtn");
+            $(this).prop("value", "Update");
+        });
+
+        $("#prefs_body").on("click", ".updateBtn", function () {
+            var row = $(this).closest("tr");
+            var textCell = row.find(".textColumn");
+           // {% comment %} var dateCell = row.find(".dateColumn"); {% endcomment %}
+
+            var updatedTextValue = textCell.find("input").val();
+
+          //  {% comment %} var updatedDateValue = dateCell.find("input").val(); {% endcomment %}
+
+            let id = $(this).attr("data-sid")
+            let csr = $("input[name=csrfmiddlewaretoken").val();
+            mydata = { id: id, text: updatedTextValue, date: "2023-06-14", csrfmiddlewaretoken: csr }
+            console.log(mydata)
+            $.ajax({
+                url: "{% url 'edit_pref' %}",
+                method: "POST",
+                dataType: "json",
+                data: mydata,
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Update successful");
+                        textCell.text(updatedTextValue);
+                      //  {% comment %} dateCell.text(updatedDateValue); {% endcomment %}
+                    } else {
+                        console.log("Update failed: " + response.error);
+                    }
+                },
+                error: function (error) {
+                    console.log("Update failed: " + error);
+                }
+            });
+
+            $(this).removeClass("updateBtn").addClass("btn-edit");
+            $(this).prop("value", "Edit");
+        });
+    });
+
+    //profile data
+    // AJAX function to enable form editing
+    $('#mail-form').on('click', '.btn-edit', function () {
+        // Enable form inputs
+        $('#freq').prop('disabled', false);
+        $('#timeid').prop('disabled', false);
+        $('#emailid').prop('disabled', false);
+        // Change button Class
+        $(this).removeClass("btn-edit").addClass("updateBtn");
+        $(this).prop("value", "Save");
+        console.log('pressed edit')
+    });
+
+    // AJAX function to save form data
+    $('#mail-form').on('click', '.updateBtn', function () {
+        // Disable form inputs
+        $('#freq').prop('disabled', true);
+        $('#timeid').prop('disabled', true);
+        $('#emailid').prop('disabled', true);
+        let fv = $('#freq').val()
+        let tv = $('#timeid').val()
+        let ev = $('#emailid').val()
+        let csr = $("input[name=csrfmiddlewaretoken").val();
+        formData = { freq: fv, email: ev, time: tv, csrfmiddlewaretoken: csr }
+        console.log(formData)
+        // Send POST request
+        $.ajax({
+            url: "{% url 'profile' %}",
+            method: 'POST',
+            dataType: "json",
+            data: formData
+        });
+        // Change button Class
+        $(this).removeClass("updateBtn").addClass("btn-edit");
+        $(this).prop("value", "Edit");
+    });
+
+</script>
