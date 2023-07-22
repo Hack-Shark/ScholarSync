@@ -9,10 +9,10 @@ class Preference(models.Model):
     text=models.CharField(max_length=100,blank=False)
     id=models.UUIDField(default=uuid.uuid4, editable=False,primary_key=True)
     created_at= models.DateField(default=date.today)
-    after = models.IntegerField(blank=False, validators=[MinValueValidator(1900), MaxValueValidator(9999)])
+    # after = models.IntegerField(blank=False, validators=[MinValueValidator(1900), MaxValueValidator(9999)])
 
     def __str__(self):
-        return f'{self.user}\t{self.text}\t{self.after}'
+        return f'{self.user}\t{self.text}\t'
     
 
 class CombinedText(models.Model):
@@ -49,13 +49,15 @@ class UserArticle(models.Model):
     def __str__(self):
         return f'{self.user}\t{self.article}'
 
-class JournalArticle(models.Model):
-    article_index = models.IntegerField(null=False,default=-1)
-    publication_index = models.IntegerField(null=False,default=-1)
-    item_doi=models.CharField(primary_key=True)
+
+class SpringerData(models.Model):
+    item_title = models.CharField(null=False,default="",max_length=10000)
+    publication_title = models.CharField(null=False,default="",max_length=10000)
+    item_doi=models.CharField(primary_key=True,max_length=500)
+    authors = models.TextField(null=True)
     publication_year = models.PositiveIntegerField(null=True)
     url = models.URLField()
-    article_tags = models.CharField(null=True)
+    keywords = models.TextField(null=True)
     
-    def __str__(self):
-        return f'{self.publication_index}\t{self.article_index}'
+    def _str_(self):
+        return f'{self.item_title}\t{self.publication_title}'

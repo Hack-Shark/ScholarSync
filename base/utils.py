@@ -1,18 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import re
-import os
-from .redis_cache import load_stop_words
-STOP_WORDS_CACHE=load_stop_words()
-
-def preprocessing(text):
-    clean_text = ''
-    words = re.findall(r'\b\w+\b', text.lower())
-    words = text.lower().split()
-    for word in words:
-        if (re.match(r'^[a-zA-Z]+$', word) and word not in STOP_WORDS_CACHE and len(word) > 1 and word[1] != '.'):
-            clean_text = clean_text+' '+word
-    return clean_text
+from .models import Article, UserArticle
 
 
 def article_data(url):
@@ -33,8 +21,6 @@ def article_data(url):
 
     return ({'title': title, 'abstract': abstract, 'authors': authors, 'published_date': published, 'url': url, 'download_link': download_link})
 
-
-from .models import Article, UserArticle
 
 def process_articles(links,user):
     processed_links = []

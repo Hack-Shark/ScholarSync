@@ -5,7 +5,7 @@ from .models import EmailTime
 from datetime import datetime, timedelta
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
-from base.article_recommender import get_links
+from base.api_caller import get_links
 from base.models import CombinedText
 from base.utils import process_articles, article_data
 
@@ -35,7 +35,7 @@ def schedule_emails():
         for email_time in email_times:
             email = email_time.email
             user = email_time.user
-            mailing_time = time.time()
+            # mailing_time = time.time()
             text = CombinedText.objects.get(user=user).combined_text
             related_links = get_links(text)
             if(related_links!=None):

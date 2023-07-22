@@ -1,18 +1,20 @@
 from .forms import PrefAddForm
 from django.http import JsonResponse
 from .models import Preference
-from .article_recommender import compare_user_input_with_tags
-import time
-# from .subprocess import mails
+from .api_caller import validate
+# import time
+
 def pref_add(request):
     if request.method == 'POST':
         form = PrefAddForm(request.POST)
         if form.is_valid():
             obj=form.save(commit=False)
             obj.user=request.user
-            start_time =time.time()
-            validity = compare_user_input_with_tags(obj.text)
-            if validity == 'valid':
+            # start_time =time.time()
+            validity = validate(obj.text)
+            
+            if validity['validation'] == 'valid':
+                obj.text=validity['sentence']
                 obj.save()
                 prefs=Preference.objects.filter(user=request.user).values()
                 pref_data=list(prefs)[::-1]
@@ -33,8 +35,6 @@ def pref_add(request):
 #     if request.method=='GET' :
 #         prefs=Preference.objects.filter(user=request.user).values()
 #         pref_data=list(prefs)[::-1]
-        
-#         # mail_send(data={'data':"Hi from moki"},website="bahubali",recipents=['mssrinu004@gmail.com'])
 #         return JsonResponse({'status':'Get','pref_data':pref_data})
 #     else:
 #         return JsonResponse({'status':0})

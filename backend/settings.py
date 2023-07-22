@@ -28,10 +28,8 @@ DEBUG = config('DEBUG',cast=bool,default=True)
 
 
 ALLOWED_HOSTS = ["*"]
-CORS_ALLOWED_ORIGINS = [
-   "https://scholarsyncapp-production.up.railway.app/",
-]
-CSRF_TRUSTED_ORIGINS = ["https://scholarsyncapp-production.up.railway.app/"]
+CORS_ALLOWED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = []
 
 # Application definition
 
@@ -82,28 +80,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config('DATABASE_NAME'),
-        "USER": config('DATABASE_USER'),
-        "PASSWORD": config('DATABASE_PASSWORD'),
-        "HOST": config('DATABASE_HOST'),
-        "PORT": config('DATABASE_PORT'),
-    }
-}
-CACHE_TTL = 60 * 15000
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": config('DATABASE_NAME'),
+#         "USER": config('DATABASE_USER'),
+#         "PASSWORD": config('DATABASE_PASSWORD'),
+#         "HOST": config('DATABASE_HOST'),
+#         "PORT": config('DATABASE_PORT'),
+#     }
+# }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://default:jUBvaknXS85RUImEtUmh@containers-us-west-190.railway.app:5637",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "example"
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
